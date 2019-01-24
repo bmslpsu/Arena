@@ -2,7 +2,7 @@
 Functions for making patterns for LED arenas
 ## Main Functions
 ### ```MakePattern_InterpolatedMotion.m```
-* Simulates motion via changes in contrast
+* Simulates motion via changes in contrast for specified vertical bar spatial frequency
 
 ### ```MakePattern_RandomGround.m```
-* Simulates motion via changes in contrast
+* Random vertical bar widths
