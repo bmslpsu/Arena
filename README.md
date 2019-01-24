@@ -9,6 +9,9 @@ Functions for making patterns for LED arenas
 ### ```MakePattern_RandomGround.m```
 * Random vertical bar widths
 
+### ```MakePattern_FourierBar.m```
+* Random vertical bar widths with a moving figure
+
 ## Pattern Tools
 ### ```BinPats.m```
 * 
