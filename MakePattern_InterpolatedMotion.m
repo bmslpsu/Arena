@@ -1,5 +1,6 @@
 function [] = MakePattern_InterpolatedMotion( root, spatFreq , Steps, playPat , savePat )
-% MakePattern_InterpolatedMotion_V0: creates pattern for controller V3 using varying contrasts to create apparent motion of the 
+%---------------------------------------------------------------------------------------------------------------------------------
+% MakePattern_InterpolatedMotion: creates pattern for controller V3 using varying contrasts to create apparent motion of the 
 % stimulus
     % INPUTS:
         % root      :	folder to save pattern
