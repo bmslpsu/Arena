@@ -1,10 +1,8 @@
-function [] = MakePattern_InterpolatedMotion( root, spatFreq , Steps, playPat , savePat )
+function [] = MakePattern_RandomGround( root, playPat , savePat )
 % MakePattern_InterpolatedMotion_V0: creates pattern for controller V3 using varying contrasts to create apparent motion of the 
 % stimulus
     % INPUTS:
         % root      :	folder to save pattern
-        % spatFreq  :	specify spatial frequency [deg] (must me in increments of 7.5: 7.5,15,22.5,30, ...)
-        % Steps     :	transition steps per cycle (also gain factor for arena panels)
         % playPat   :   boolean to play pattern (1 is on, 0 is off): if any other number >>> playback at that frequency 
         % savePat   :   boolean to save pattern (1 is on, 0 is off)
   	% OUTPUTS:
@@ -48,60 +46,54 @@ pattern.num_panels = 48;        % # panels in arena
 pattern.gs_val = 4;             % grey-scale #: 4 = 0:15
 pattern.row_compression = 1;    % condense columns  = ON
 pattern.x_num = 96;             % # x-frames
+pattern.y_num = 4;             % # x-frames
 
 pixelX = pattern.x_num;                         % # X pixels
 pixelY = pattern.num_panels/(pattern.x_num/8);  % # Y pixels
 
 Int.High = 15; % high intensity value (0-15)
-Int.Low = 0;   % low intensity value (0-15)
+Int.Low = 2;   % low intensity value (0-15)
 
-Period = (spatFreq/360)*pixelX; % full period for spatial frequency [# pixels]
-repeat = pixelX/Period; % if this value is an integer, then this spatial frequency is valid
-
-if (floor(Period) == Period) && (floor(repeat) == repeat) % make sure spatial frequency is valid
-    disp('Valid Spatial Frequency')
-else
-    error('ERROR: spatial frequency unattainable!')
-end
-
-pattern.y_num = Steps*Period;	% # y-frames
-
-if (pattern.y_num <= pattern.x_num) && (Steps>0) % make sure # steps is valid
-    disp('Valid # of Steps')
-else
-    error('ERROR: # of steps unattainable!')
-end
 %% Make Pattern Matrix %%
 %---------------------------------------------------------------------------------------------------------------------------------
 Pats = zeros(pixelY, pixelX, pattern.x_num, pattern.y_num); % preallocate pattern matrix
-
-val = (pixelX*Steps)/pattern.y_num; % # repeat
-
-InitPat = repmat([Int.Low*ones(pixelY,Steps*(Period/2)), ... % matrix to average
-    Int.High*ones(pixelY,Steps*(Period/2))], 1,val);
-
-% Assign x-channel frames
-temp_Pats(:,:,1) = InitPat;
-for j = 2:pattern.x_num
-    temp_Pats(:,:,j) = ShiftMatrix(temp_Pats(:,:,j - 1), 1,'r','y');       
+clc
+%Initialize Pattern
+A = 0;
+while A == 0
+    %Band-pass filter pattern
+    %make sure background contrast at 50%
+    C = 1;
+    while C == 1
+        pattern_back = round(repmat(rand(1,pixelX),[pixelY 1])); % create random background
+        % if overall contrast of background and figure = 50%
+        if (sum(pattern_back(1,:)) == pixelX/2)
+            wc = diff(pattern_back(1,:));
+            mm = 1;
+            for jj = 1:length(wc)-1
+                if (abs(wc(jj)) == 1) && (abs(wc(jj+1)) == 1)  % 1 pixel column
+                    mm = mm + 1;
+                end
+            end
+            if mm <= 10 % allow only 10 elements with widths = 3.75deg
+                C = 0;
+            end
+        end
+    end
+    pattern_back(pattern_back==0) = Int.Low;
+    pattern_back(pattern_back==1) = Int.High;
+    figure; imagesc(pattern_back);
+    A = input('Accept pattern? (1=yes,0=no): '); % 1 yes, 0 no
+    
+    close all
 end
 
-% Make first set of expansion pats
-for j = 1:pattern.y_num
-    for i = 1:pattern.x_num
-        Pats(:,i,1,j) = round(sum(temp_Pats(:,((i*Steps)-(Steps-1)):i*Steps,j),2)./Steps);
-    end
-end    
-
-for j = 1:pattern.y_num
-    for i = 2:pattern.x_num
-        Pats(:,:,i,j) = ShiftMatrix(Pats(:,:,i-1,j), 1, 'r', 'y'); 
-    end
-end
-
-for j = 1:pattern.y_num   % shifts pattern so it is centered
-    for i = 1:pattern.x_num
-        Pats(:,:,i,j) = ShiftMatrix(Pats(:,:,i,j), 3, 'l', 'y'); 
+% Move through x-channel
+kk = 0;
+for ii = 1:pattern.y_num
+    for jj = 1:pattern.x_num
+        Pats(:,:,jj,ii) = circshift(pattern_back, [0 kk]); % rotate ground by 1 pixel
+        kk = kk + 1;
     end
 end
 %% Play Pattern %%
@@ -109,9 +101,9 @@ end
 if playPat
     h = figure (1) ; clf % pattern window
     tic           
-    for jj = 1:10 % how many time to loop pattern
-        for kk = 1:size(Pats,4) % play y-channel
-            imagesc(Pats(:,:, 1, kk)) % display frame
+    for jj = 1:3 % how many time to loop pattern
+        for kk = 1:size(Pats,3) % play y-channel
+            imagesc(Pats(:,:, kk, 1)) % display frame
             if 1==playPat % 
                 pause % user clicks to move to next frame
             else      
@@ -132,7 +124,7 @@ if savePat
                          48 44 40 47 43 39 46 42 38 45 41 37];
     pattern.BitMapIndex = process_panel_map(pattern);
     pattern.data = make_pattern_vector(pattern);
-    str = [root '\Pattern_InterpolatedMotion_SpatFreq_' num2str(spatFreq) '_Steps_' num2str(Steps) '_48Pan.mat'];
+    str = [root '\Pattern_RandomGround_48Pan.mat'];
     save(str, 'pattern');
 end
 disp('DONE')
