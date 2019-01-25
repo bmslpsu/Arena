@@ -1,29 +1,31 @@
 # Arena
-Functions for making patterns for LED arenas
+Functions for making patterns & functions for LED arenas
 
-## Main Functions
+## Pattern Functions
 
-### ```MakePattern_InterpolatedMotion.m```
+### Main
+#### ```MakePattern_InterpolatedMotion.m```
 * Simulates motion via changes in contrast for specified vertical bar spatial frequency
 
-### ```MakePattern_RandomGround.m```
+#### ```MakePattern_RandomGround.m```
 * Random vertical bar widths
 
-### ```MakePattern_FourierBar.m```
+#### ```MakePattern_FourierBar.m```
 * Random vertical bar widths with a moving figure
 
-## Pattern Tools
-### ```BinPats.m```
+### Tools
+#### ```BinPats.m```
 * 
-### ```make_panel_bit_map.m```
+#### ```make_panel_bit_map.m```
 * 
-### ```makeBitMap.m```
+#### ```makeBitMap.m```
 * 
-### ```MakePat.m```
+#### ```MakePat.m```
 * 
-### ```Pattern_Repeater.m```
+#### ```Pattern_Repeater.m```
 * 
-### ```ShiftMatrix.m```
+#### ```ShiftMatrix.m```
 * 
-### ```simple_expansion.m```
+#### ```simple_expansion.m```
 * 
+## Position Functions
