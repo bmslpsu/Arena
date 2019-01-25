@@ -1,4 +1,4 @@
-# LED-Patterns
+# Arena
 Functions for making patterns for LED arenas
 
 ## Main Functions
