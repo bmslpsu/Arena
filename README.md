@@ -14,7 +14,7 @@ Functions for making patterns & functions for LED arenas
 * Random vertical bar widths with a moving figure
 
 #### ```MakePattern_SpatFreq.m```
-* Vertical bar at set spatial frequency
+* Vertical bars at set spatial frequency
 
 ### Tools
 #### ```BinPats.m```
