@@ -1,14 +1,14 @@
-function [] = MakePattern_FourierBar(barwidth)
+function [] = MakePattern_FourierBar(barwidth,root,playPat,savePat)
 %---------------------------------------------------------------------------------------------------------------------------------
 % MakePattern_FourierBar: creates pattern of vertical bars with varying widths
 % stimulus
-    % INPUTS:
-        % barwidth  :   width of bars
-        % root      :	folder to save pattern
-        % playPat   :   boolean to play pattern (1 is on, 0 is off): if any other number >>> playback at that frequency 
-        % savePat   :   boolean to save pattern (1 is on, 0 is off)
-  	% OUTPUTS:
-        % -
+%   INPUTS:
+%       barwidth    :	width of bars
+%       root        :	folder to save pattern
+%       playPat     :   boolean to play pattern (1 is on, 0 is off): if any other number >>> playback at that frequency 
+%       savePat     :   boolean to save pattern (1 is on, 0 is off)
+%   OUTPUTS:
+%
 %---------------------------------------------------------------------------------------------------------------------------------
 %   This program creates one structure ('pattern').  The relevant components of
 %   this structure are as follows:
@@ -36,16 +36,15 @@ function [] = MakePattern_FourierBar(barwidth)
 %                                   'make_pattern_vector(pattern);'
 %
 %   FIGWIDTH        -    width of figure in pixels
-
 %% DEBUGGING %%
 % ONLY UNCOMMENT & RUN THIS SECTION IF DEBUGGING %
 %---------------------------------------------------------------------------------------------------------------------------------
-%     root = 'C:\';
-%     playPat = 1;
-%     savePat = 0;
+% barwidth = 6;
+% root = 'C:\';
+% playPat = 1;
+% savePat = 0;
 %% Setup Parameters %%
 %---------------------------------------------------------------------------------------------------------------------------------
-tic
 %GENERAL PARAMETERS
 pattern.x_num       = 96;   % # of frames in 'x' channel
 pattern.y_num       = 96;   % # of frame in 'y' channel
@@ -69,7 +68,7 @@ pattern.params.Figwidth = barwidth;
 pattern.name = strcat(pattern.name,...
     '_barwidth=', num2str(pattern.params.Figwidth));
 
-%Initialize Pattern
+% Initialize Pattern
 A = 0;
 while A == 0
     % Band-pass filter pattern
@@ -78,8 +77,7 @@ while A == 0
     while C == 1
         pattern_back = round(repmat(rand(1,96),[4 1])); % create random background
         % if overall contrast of background and figure = 50%
-        if (sum(pattern_back(1,:)) == 96/2) && ...
-                (sum(pattern_back(1,1:barwidth)) == barwidth/2)
+        if (sum(pattern_back(1,:)) == 96/2) && (sum(pattern_back(1,1:barwidth)) == barwidth/2)
             wc = diff(pattern_back(1,:));
             mm = 1;
             for jj = 1:length(wc)-1
@@ -118,8 +116,22 @@ for ii = 1:pattern.y_num
 
     end
 end
-
-pattern.Pats = Pats;
+%% Play Pattern %%
+%---------------------------------------------------------------------------------------------------------------------------------
+if playPat
+    h = figure (1) ; clf % pattern window
+    for jj = 1:3 % how many time to loop pattern
+        for kk = 1:size(Pats,4) % play y-channel
+            imagesc(Pats(:,:, kk, 1)) % display frame
+            if 1==playPat % 
+                pause % user clicks to move to next frame
+            else      
+                pause(1/playPat) % automatic frame rate
+            end
+        end
+    end
+    close(h)
+end
 %% Save Pattern %%
 %---------------------------------------------------------------------------------------------------------------------------------
 if savePat
