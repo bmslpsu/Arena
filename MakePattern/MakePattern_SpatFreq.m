@@ -49,7 +49,7 @@ pattern.gs_val = 4;                 % This pattern will use 8 intensity levels
 pattern.row_compression = 1;        % Columns are symmetric
 pattern.x_panel = pattern.x_num;
 pattern.y_panel = pattern.num_panels*8/pattern.x_num;
-%% Make PATS %%
+%% Make PATS %% d
 %---------------------------------------------------------------------------------------------------------------------------------
 % Calculate bar widths
 barwidth = zeros(1,pattern.y_num);
