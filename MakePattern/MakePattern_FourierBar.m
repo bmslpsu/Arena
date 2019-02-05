@@ -39,10 +39,10 @@ function [] = MakePattern_FourierBar(barwidth,root,playPat,savePat)
 %% DEBUGGING %%
 % ONLY UNCOMMENT & RUN THIS SECTION IF DEBUGGING %
 %---------------------------------------------------------------------------------------------------------------------------------
-% barwidth = 6;
-% root = 'C:\';
-% playPat = 1;
-% savePat = 0;
+barwidth = 6;
+root = 'C:\';
+playPat = 1;
+savePat = 0;
 %% Setup Parameters %%
 %---------------------------------------------------------------------------------------------------------------------------------
 %GENERAL PARAMETERS
