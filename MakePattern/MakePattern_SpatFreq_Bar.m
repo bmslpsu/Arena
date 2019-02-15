@@ -1,6 +1,6 @@
-function [] = MakePattern_SpatFreq(freq,root,savePat)
+function [] = MakePattern_SpatFreq_Bar(figwidth,barwidth,root,savePat)
 %---------------------------------------------------------------------------------------------------------------------------------
-% MakePattern_SpatFreq: makes pattern with two channels
+% MakePattern_SpatFreq_Bar: makes pattern 
 % Channel-X: changes spatial frequency
 % Channel-Y: rotates ground
 %   INPUTS:
@@ -37,13 +37,14 @@ function [] = MakePattern_SpatFreq(freq,root,savePat)
 %% DEBUGGING %%
 % ONLY UNCOMMENT & RUN THIS SECTION IF DEBUGGING %
 %---------------------------------------------------------------------------------------------------------------------------------
-% freq = 3.75*[2,4,6,8,12,16,24,32,48,96];
+% figwidth = 6;
+% barwidth = 3;
 % root = 'Q:\Box Sync\Git\Arena\Patterns\';
 % savePat = 1;
 %% Set up panel variables %%
 %---------------------------------------------------------------------------------------------------------------------------------
 pattern.x_num = 96;                 % There are 96 pixel around the display (12x8) 
-pattern.y_num = length(freq);       % # of spatial frequencies
+pattern.y_num = 96;                 % There are 96 pixel around the display (12x8) 
 pattern.num_panels = 48;            % This is the number of unique Panel IDs required
 pattern.gs_val = 1;                 % This pattern will use 2 intensity levels
 pattern.row_compression = 1;        % Columns are symmetric
@@ -53,43 +54,29 @@ Int.High = 1; % high intensity value (0-15)
 Int.Low = 0;  % low intensity value (0-15)
 %% Make PATS %% d
 %---------------------------------------------------------------------------------------------------------------------------------
-% Calculate bar widths
-barwidth = zeros(1,pattern.y_num);
-for kk = 1:pattern.y_num
-   barwidth(kk) = pattern.x_num*(freq(kk)/360);
-end
-
-% Check spatial frequencies
-% goodFreq = barwidth(mod(pattern.x_num,barwidth)==0);
-badFreq  = 3.75*barwidth(mod(pattern.x_num,barwidth)~=0);
-if ~isempty(badFreq)
-    err = '';
-    for kk = 1:length(badFreq)
-        err = [err,sprintf(['%1.1f' char(176) ' invalid \n'],badFreq(kk))];
-    end
-    err = [err,['Valid Frequencies are factors of 360' char(176) ' & divisible by 7.5']];
-	error(err)
-end
-
-% Make y-channel spatial frequency
-Pats = zeros(pattern.y_panel,pattern.x_panel,pattern.x_num,pattern.y_num);
-qq = 1;
-for jj = 1:pattern.y_num
-    pp = 1;
-    for kk = barwidth(jj):barwidth(jj):pattern.x_num
-        Pats(:,pp:kk, 1, qq) = [Int.Low*ones(pattern.y_panel,barwidth(jj)/2) Int.High*ones(pattern.y_panel,barwidth(jj)/2)];
-        pp = kk + 1;
-    end
-    qq = qq + 1;
+clc
+% Make y-channel
+Pats = zeros(pattern.y_panel,pattern.x_panel,pattern.y_num,pattern.x_num);
+Period = [Int.High*ones(4,barwidth) , Int.Low*ones(4,barwidth)];
+IntPats = repmat(Period,1,pattern.x_num/size(Period,2));
+Pats(:,:,1,1) = IntPats;
+for ii = 1:pattern.y_num
+    Pats(:,:,1,ii+1) = ShiftMatrix(Pats(:,:,1,ii), 1, 'r', 'y');
 end
 
 % Make x-channel
-for j = 1:pattern.y_num
-    for i = 2:pattern.x_num
-        Pats(:,:,i,j) = ShiftMatrix(Pats(:,:,i-1,j), 1, 'r', 'y'); 
+figMask = logical([ones(4,figwidth) , zeros(4,pattern.x_num-figwidth)]);
+for ii = 1:pattern.y_num
+    background = Pats(:,:,1,ii);
+    pp = 0;
+    for jj = 2:pattern.x_num
+        figMask_shift = ShiftMatrix(figMask, pp, 'r', 'y');
+        temp = background;
+        temp( figMask_shift) = Int.High;
+       	Pats(:,:,jj,ii) = temp;
+        pp = pp + 1;
     end
 end
-
 %% Save Pattern %%
 %---------------------------------------------------------------------------------------------------------------------------------
 if savePat
@@ -101,14 +88,8 @@ if savePat
     pattern.BitMapIndex = process_panel_map(pattern);
     pattern.data = make_pattern_vector(pattern);
     
-    % Name file
-    strFreq = '';
-    for kk = 1:length(freq)
-       strFreq = [strFreq  num2str(freq(kk)) '_'];
-    end
-    strFreq = strtrim(strFreq);
-	str = [root '\Pattern_SpatFreq_' strFreq '48Pan.mat'];
-    
+    % Save file to root
+	str = [root '\Pattern_SpatFreq_Bar_48Pan.mat']; 
     save(str, 'pattern');
 end
 disp('DONE')

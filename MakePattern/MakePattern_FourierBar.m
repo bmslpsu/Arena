@@ -39,10 +39,10 @@ function [] = MakePattern_FourierBar(barwidth,root,playPat,savePat)
 %% DEBUGGING %%
 % ONLY UNCOMMENT & RUN THIS SECTION IF DEBUGGING %
 %---------------------------------------------------------------------------------------------------------------------------------
-% barwidth = 6;
-% root = 'C:\';
-% playPat = 1;
-% savePat = 0;
+barwidth = 6;
+root = 'C:\';
+playPat = 1;
+savePat = 0;
 %% Setup Parameters %%
 %---------------------------------------------------------------------------------------------------------------------------------
 %GENERAL PARAMETERS
@@ -121,8 +121,8 @@ end
 if playPat
     h = figure (1) ; clf % pattern window
     for jj = 1:3 % how many time to loop pattern
-        for kk = 1:size(Pats,4) % play y-channel
-            imagesc(Pats(:,:, kk, 1)) % display frame
+        for kk = 1:size(Pats,3) % play y-channel
+            imagesc(Pats(:,:, kk,1)) % display frame
             if 1==playPat % 
                 pause % user clicks to move to next frame
             else      
