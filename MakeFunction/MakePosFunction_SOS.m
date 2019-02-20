@@ -4,12 +4,12 @@ function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot,saveFunc)
 %       root:       :   root directory to save position function file
 %       F           :   frequency range vector [Hz]
 %       N           :   # of frequencies
-%       A           :   amplitude (+/-) [deg]
+%       A           :   amplitude vector (+/-) [deg]
 %       T           :   total time [s]
 %       Fs          :   sampling Frequency [Hz]
-%       centPos     :   pixel # at cneter of panel
-%       showplot  	:   boolean (1 = show pos vs time)
-%       saveFunc  	:   boolean (1 = save function to root)
+%       centPos     :   pixel # at center of panel
+%       showplot  	:   boolean (1= show pos vs time)
+%       saveFunc  	:   boolean (1= save function to root)
 %   OUTPUTS:
 %       - 
 %% DEBUGGING %%
