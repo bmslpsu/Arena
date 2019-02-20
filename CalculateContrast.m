@@ -12,7 +12,7 @@ function [varargout] = CalculateContrast(varargin)
 %
 %---------------------------------------------------------------------------------------------------------------------------------
 Int_to_Lum = @(x) (7*10.02/15)*x; % mapping LED intensity (gs=4) to luminance (cd*m^-2) from paper
-MichContr   = @(imax,imin) (imax-imin)./(imax+imin); % mapping luminance to Michelson contrast
+MichContr   = @(Lmax,Lmin) (Lmax-Lmin)./(Lmax+Lmin); % mapping luminance to Michelson contrast
 if nargin==2
     I1 = varargin{1}(:);
     I2 = varargin{2}(:);
