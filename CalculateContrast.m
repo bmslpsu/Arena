@@ -7,7 +7,7 @@ function [varargout] = CalculateContrast(varargin)
 %       - Returns table of all possible intensity combinations, and their mappings to lumiance & Michelson contrast
 %   [Contrast] = CalculateContrasts(I_1,I_2)
 %       - Returns Michelson contrast for two intensity values using gs=4 mode (must be positive integers from 0-15)
-%       - If I_1 % I_2 are arrays, then [Contrast] will return an array of Michelson contrasts
+%       - If I_1 & I_2 are arrays (of the same size), then will return an array of Michelson contrasts
 %% Mapping Fucntions%%
 %---------------------------------------------------------------------------------------------------------------------------------
 Int_to_Lum = @(x) (7*10.02/15)*x; % mapping LED intensity (gs=4) to luminance (cd*m^-2) from paper
