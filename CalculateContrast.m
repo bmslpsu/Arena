@@ -1,52 +1,52 @@
-function [varargout] = CalculateContrast(varargin)
+function [varargout] = CalculateContrast(gs,varargin)
 % CalculateContrast: returns Michelson contrasts for LED arena luminance levels
 % NOTES:    1. Luminance values source: "A modular display system for insect behavioral neuroscience"
 %           2. Michelson Contrast Formula : https://www.schorsch.com/en/kbase/glossary/contrast.html
 %---------------------------------------------------------------------------------------------------------------------------------
 % USAGE: 2 modes
-%   [T] = CalculateContrasts()
+%   [T] = CalculateContrasts(gs)
+%       - "gs" is the pattern grey scale value (must be a positive integer between 1-4)
 %       - Returns table of all possible intensity combinations, and their mappings to lumiance & Michelson contrast
-%   [Contrast] = CalculateContrasts(I_1,I_2)
+%   [Contrast] = CalculateContrasts(gs,I_1,I_2)
 %       - Returns Michelson contrast for two intensity values using gs=4 mode (must be positive integers from 0-15)
 %       - If I_1 & I_2 are arrays (of the same size), then will return an array of Michelson contrasts
 %
 %---------------------------------------------------------------------------------------------------------------------------------
-Int_to_Lum  = @(x) (7*10.02/15)*x; % mapping LED intensity (gs=4) to luminance (cd*m^-2) from paper
+if (length(gs)<1) || (round(gs)~=gs) || (gs<1) || (gs>4)
+    error('Grey scale values must be a positive integer between 1-4')
+end
+gsLevel = 2^(gs) - 1;
+INT_levels = 0:gsLevel;
+Int_to_Lum  = @(x) (7*10.02/gsLevel)*x; % mapping LED intensity (gs=4) to luminance (cd*m^-2) from paper
 MichContr   = @(Lmax,Lmin) (Lmax-Lmin)./(Lmax+Lmin); % mapping luminance to Michelson contrast
-if nargin==2
+if nargin==3
     I1 = varargin{1}(:);
     I2 = varargin{2}(:);
     if any(size(I1)~=size(I2))
         error('Intensity arrays must be the same size')
     end
     Int = [I1,I2];
-    if any(any(Int<0)) || any(any(Int>15)) || any(any(round(Int)~=Int))
-        error('Intensities must be positive integers from 0-15')
+    if any(any(Int<0)) || any(any(Int>gsLevel)) || any(any(round(Int)~=Int))
+        error(['Intensities must be positive integers from 0-' num2str(gsLevel)])
     end
     Lmax = Int_to_Lum(max(Int));
 	Lmin = Int_to_Lum(min(Int));
     Contrast = MichContr(Lmax,Lmin);
     varargout{1} = Contrast;
-elseif (nargin==1) || (nargin>2)
-    error('Input options include: two intensity values OR zero inputs')
-elseif (nargin==0)
-    % Calculate all possible contrast ratios
-    INT_level.gs1   = 0:2^(1)-1;   	% contrast values for gs=1
-    INT_level.gs2   = 0:2^(2)-1;  	% contrast values for gs=2
-    INT_level.gs3   = 0:2^(3)-1;   	% contrast values for gs=3
-    INT_level.gs4   = 0:2^(4)-1;   	% contrast values for gs=4
-
-    LUM_level   = Int_to_Lum(INT_level.gs4); % luminance corresponding to each intensity level for gs=4
+elseif (nargin==2) || (nargin>2)
+    error('Input options include: grey scale value + two intensity values OR zero inputs')
+elseif (nargin==1)
+    LUM_levels   = Int_to_Lum(INT_levels); % luminance corresponding to each intensity level for gs=4
 
     % Luminance vs LED Intensity Settings
     figure (1) ; clf ; hold on ; grid on ; grid minor ; box on
     title('Luminance vs LED Intensity Settings')
     xlabel('LED Display Intensity Level (gs=3)','FontSize',14,'interpreter','latex')
     ylabel('Luminance $[cd*m^{-2}]$','FontSize',16,'interpreter','latex')
-    plot(INT_level.gs4,LUM_level,'-og','LineWidth',3,'MarkerSize',8)
+    plot(INT_levels,LUM_levels,'-og','LineWidth',3,'MarkerSize',8)
 
     % Find all unique combinations of contrast levels
-    [A,B] = meshgrid(INT_level.gs4,INT_level.gs4);
+    [A,B] = meshgrid(INT_levels,INT_levels);
     C  = cat(2,A',B');
     allComb = reshape(C,[],2);   % all combinations of intensities
     [~,jj] = unique(sort(allComb,2),'rows','stable');
@@ -88,6 +88,8 @@ elseif (nargin==0)
     colorbar
     colormap default
     rotate3d on
+elseif nargin==0
+    error('Not enough inputs, need at least the grey scale value')
 else
     error('Something is wrong')
 end

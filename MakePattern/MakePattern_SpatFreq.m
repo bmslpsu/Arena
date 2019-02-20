@@ -45,12 +45,12 @@ function [] = MakePattern_SpatFreq(freq,root,savePat)
 pattern.x_num = 96;                 % There are 96 pixel around the display (12x8) 
 pattern.y_num = length(freq);       % # of spatial frequencies
 pattern.num_panels = 48;            % This is the number of unique Panel IDs required
-pattern.gs_val = 1;                 % This pattern will use 2 intensity levels
+pattern.gs_val = 4;                 % This pattern will use 2 intensity levels
 pattern.row_compression = 1;        % Columns are symmetric
 pattern.x_panel = pattern.x_num;
 pattern.y_panel = pattern.num_panels*8/pattern.x_num;
-Int.High = 1; % high intensity value (0-15)
-Int.Low = 0;  % low intensity value (0-15)
+Int.High = 12; % high intensity value (0-15)
+Int.Low = 4;  % low intensity value (0-15)
 %% Make PATS %% d
 %---------------------------------------------------------------------------------------------------------------------------------
 % Calculate bar widths
@@ -107,7 +107,7 @@ if savePat
        strFreq = [strFreq  num2str(freq(kk)) '_'];
     end
     strFreq = strtrim(strFreq);
-	str = [root '\Pattern_SpatFreq_' strFreq '48Pan.mat'];
+	str = [root '\Pattern_SpatFreq_' strFreq '_Cont=' num2str(Int.High) '-' num2str(Int.Low) '_48Pan.mat'];
     
     save(str, 'pattern');
 end
