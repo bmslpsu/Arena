@@ -2,13 +2,14 @@ function [varargout] = CalculateContrast(varargin)
 % CalculateContrast: returns Michelson contrasts for LED arena luminance levels
 % NOTES:    1. Luminance values source: "A modular display system for insect behavioral neuroscience"
 %           2. Michelson Contrast Formula : https://www.schorsch.com/en/kbase/glossary/contrast.html
+%---------------------------------------------------------------------------------------------------------------------------------
 % USAGE: 2 modes
 %   [T] = CalculateContrasts()
 %       - Returns table of all possible intensity combinations, and their mappings to lumiance & Michelson contrast
 %   [Contrast] = CalculateContrasts(I_1,I_2)
 %       - Returns Michelson contrast for two intensity values using gs=4 mode (must be positive integers from 0-15)
 %       - If I_1 & I_2 are arrays (of the same size), then will return an array of Michelson contrasts
-%% Mapping Fucntions%%
+%
 %---------------------------------------------------------------------------------------------------------------------------------
 Int_to_Lum = @(x) (7*10.02/15)*x; % mapping LED intensity (gs=4) to luminance (cd*m^-2) from paper
 MichContr   = @(imax,imin) (imax-imin)./(imax+imin); % mapping luminance to Michelson contrast
@@ -90,5 +91,6 @@ elseif (nargin==0)
 else
     error('Something is wrong')
 end
+%---------------------------------------------------------------------------------------------------------------------------------
 end
 
