@@ -50,8 +50,8 @@ pattern.y_num = 4;             % # x-frames
 pixelX = pattern.x_num;                         % # X pixels
 pixelY = pattern.num_panels/(pattern.x_num/8);  % # Y pixels
 
-Int.High = 12; % high intensity value (0-15)
-Int.Low = 4;   % low intensity value (0-15)
+Int.High = 15; % high intensity value (0-15)
+Int.Low = 0;   % low intensity value (0-15)
 
 %% Make Pattern Matrix %%
 %---------------------------------------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ if savePat
                          36 32 28 35 31 27 34 30 26 33 29 25;...
                          48 44 40 47 43 39 46 42 38 45 41 37];
     pattern.BitMapIndex = process_panel_map(pattern);
-    pattern.data = make_pattern_vector(pattern);
+    pattern.data = Make_pattern_vector(pattern);
     str = [root '\Pattern_RandomGround_Cont=' num2str(Int.High) '-' num2str(Int.Low) '_48Pan.mat'];
     save(str, 'pattern');
 end

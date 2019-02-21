@@ -49,8 +49,8 @@ pattern.gs_val = 4;                 % This pattern will use 2 intensity levels
 pattern.row_compression = 1;        % Columns are symmetric
 pattern.x_panel = pattern.x_num;
 pattern.y_panel = pattern.num_panels*8/pattern.x_num;
-Int.High = 12; % high intensity value (0-15)
-Int.Low = 4;  % low intensity value (0-15)
+Int.High = 15; % high intensity value (0-15)
+Int.Low = 0;  % low intensity value (0-15)
 %% Make PATS %% d
 %---------------------------------------------------------------------------------------------------------------------------------
 % Calculate bar widths
@@ -99,7 +99,7 @@ if savePat
                          36 32 28 35 31 27 34 30 26 33 29 25;...
                          48 44 40 47 43 39 46 42 38 45 41 37];
     pattern.BitMapIndex = process_panel_map(pattern);
-    pattern.data = make_pattern_vector(pattern);
+    pattern.data = Make_pattern_vector(pattern);
     
     % Name file
     strFreq = '';
