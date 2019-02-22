@@ -23,13 +23,13 @@ function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot,saveFunc)
 % Fs          = 100;
 % centPos     = 14;
 % showplot    = 1;
-%% Generate Chirp Signal %%
+%% Generate SOS Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
-% f = logspace((log(F(1))/log(10)),(log(F(2))/log(10)),N)'; % frequency vector [Hz]
-f = linspace(F(1),F(2),N); % frequency vector [Hz]
-f = 0.05*round(f/0.05); % round frequencies to prime harmonics
-Phase = deg2rad(randi(359,N,1)); % phase [deg]
+% f = logspace((log(F(1))/log(10)),(log(F(2))/log(10)),N)'; % logarithmically spaced frequency vector [Hz]
+f = linspace(F(1),F(2),N); % linearly spaced frequency vector [Hz]
+f = 0.05*round(f/0.05); % round frequencies to prime harmonics [Hz]
+Phase = deg2rad(randi(359,N,1)); % random initial phase [deg]
 
 X = zeros(length(tt),1);
 for kk = 1:N
@@ -58,7 +58,7 @@ if showplot
         ylabel('Magnitude (deg)')
         xlabel('Frequency (Hz)')
         plot(Fv1,Mag1,'k','LineWidth',2);
-        plot(Fv2,Mag2,'b','LineWidth',1);
+%         plot(Fv2,Mag2,'b','LineWidth',1);
         xlim([0 F(2)+1])
     	legend('deg','panel')
 
