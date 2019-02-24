@@ -44,7 +44,7 @@ Func.panel = 3.75*round(Func.deg/3.75); % convert deg to panel position
 if showplot
     figure ; clf ; hold on ; box on ; title('Chirp Position')
         plot(tt,Func.deg,'k','LineWidth',2)
-        plot(tt,Func.panel,'b','LineWidth',2)
+        plot(tt,Func.panel,'b','LineWidth',1)
         xlabel('Time (s)')
         legend('deg','panel')
 end
@@ -60,16 +60,18 @@ if showplot
         xlabel('Frequency (Hz)')
         plot(Fv1,Mag1,'k','LineWidth',2);
         plot(Fv2,Mag2,'b','LineWidth',1);
-      	plot([FE FE],[0 max(Mag1)],'-r')
+      	plot([FE FE],[0 max(Mag1)],'--r')
+        plot([FI FI],[0 max(Mag1)],'--r')
         xlim([0 FE+0.1*FE])
-    	legend('deg','panel','limit')
+    	legend('deg','panel','limits')
 
     subplot(212) ; hold on ; box on
         ylabel('Phase (rad)')
         xlabel('Frequency (Hz)')
         plot(Fv1,Phase1,'k','LineWidth',2);
         plot(Fv2,Phase2,'b','LineWidth',1);
-      	plot([FE FE],[min(Phase1) max(Phase1)],'-r')
+      	plot([FE FE],[min(Phase1) max(Phase1)],'--r')
+    	plot([FI FI],[min(Phase1) max(Phase1)],'--r')
         xlim([0 FE+0.1*FE])
 end
 
