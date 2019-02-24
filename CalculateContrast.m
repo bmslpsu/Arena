@@ -41,7 +41,7 @@ elseif (nargin==1)
     % Luminance vs LED Intensity Settings
     figure (1) ; clf ; hold on ; grid on ; grid minor ; box on
     title('Luminance vs LED Intensity Settings')
-    xlabel('LED Display Intensity Level (gs=3)','FontSize',14,'interpreter','latex')
+    xlabel(['LED Display Intensity Level (gs=' num2str(gs) ')'],'FontSize',14,'interpreter','latex')
     ylabel('Luminance $[cd*m^{-2}]$','FontSize',16,'interpreter','latex')
     plot(INT_levels,LUM_levels,'-og','LineWidth',3,'MarkerSize',8)
 
@@ -84,6 +84,7 @@ elseif (nargin==1)
     ylabel('$I_{max}$','FontSize',14,'interpreter','latex')
     zlabel('Contrast $\frac{I_{max}-I_{min}}{I_{max}+I_{min}}$','FontSize',18,'interpreter','latex')
     box on
+    grid minor
     view(0,90)
     colorbar
     colormap default
