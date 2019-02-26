@@ -16,17 +16,17 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %       - 
 %% DEBUGGING %%
 %---------------------------------------------------------------------------------------------------------------------------------
-clear ; close all ; clc
-root        = 'Q:\Box Sync\Git\Fly-Head\Patterns\';
-FI          = 0.1;
-FE          = 12;
-A           = 7.5;
-T           = 20;
-Fs          = 100;
-centPos     = 14;
-rmp         = 1;
-method      = 'Linear';
-showplot    = 1;
+% clear ; close all ; clc
+% root        = 'Q:\Box Sync\Git\Fly-Head\Patterns\';
+% FI          = 0.1;
+% FE          = 6;
+% A           = 15;
+% T           = 20;
+% Fs          = 100;
+% centPos     = 15;
+% rmp         = 1;
+% method      = 'Linear';
+% showplot    = 1;
 %% Generate Chirp Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
@@ -43,7 +43,7 @@ Func.panel = 3.75*round(Func.deg/3.75); % convert deg to panel position
 % Chirp Position Plot
 if showplot
     figure ; clf ; hold on ; box on ; title('Chirp Position')
-        plot(tt,Func.deg,'k','LineWidth',2)
+        plot(tt,Func.deg,'k','LineWidth',1)
         plot(tt,Func.panel,'b','LineWidth',1)
         xlabel('Time (s)')
         legend('deg','panel')
