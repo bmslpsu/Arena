@@ -17,7 +17,7 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %% DEBUGGING %%
 %---------------------------------------------------------------------------------------------------------------------------------
 clear ; close all ; clc
-root        = 'Q:\Box Sync\Research\Redundant Control\Head Frequency Response\Arena Functions\Chirp\';
+root        = 'Q:\Box Sync\Git\Fly-Head\Patterns\';
 FI          = 0.1;
 FE          = 12;
 A           = 7.5;
@@ -25,7 +25,7 @@ T           = 20;
 Fs          = 100;
 centPos     = 14;
 rmp         = 1;
-method      = 'Logarithmic';
+method      = 'Linear';
 showplot    = 1;
 %% Generate Chirp Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ end
 %---------------------------------------------------------------------------------------------------------------------------------
 if saveFunc
     func  = Func.panel + centPos;
-    fname = sprintf('position_function_%s_chirp_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
+    fname = sprintf('position_function_%s_Chirp_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
     save([root fname], 'func');
 end
 end
