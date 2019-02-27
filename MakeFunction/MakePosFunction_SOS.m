@@ -1,4 +1,4 @@
-function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot,saveFunc)
+function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot)
 % MakePosFunction_SOS: makes sum-of-sine position function
 %   INPUTS:
 %       root:       :   root directory to save position function file
@@ -43,7 +43,7 @@ Func.panel = 3.75*round(Func.deg/3.75); % convert deg to panel position
 if showplot
     figure ; clf ; hold on ; box on ; title('SOS Position')
         plot(tt,Func.deg,'k','LineWidth',1)
-        plot(tt,Func.panel,'b','LineWidth',2)
+        plot(tt,Func.panel,'b','LineWidth',1)
         xlabel('Time (s)')
         legend('deg','panel')
 end
@@ -58,7 +58,7 @@ if showplot
         ylabel('Magnitude (deg)')
         xlabel('Frequency (Hz)')
         plot(Fv1,Mag1,'k','LineWidth',2);
-%         plot(Fv2,Mag2,'b','LineWidth',1);
+        plot(Fv2,Mag2,'b','LineWidth',1);
         xlim([0 F(2)+1])
     	legend('deg','panel')
 
@@ -72,17 +72,15 @@ end
 
 %% Save Fucntion %%
 %---------------------------------------------------------------------------------------------------------------------------------
-if saveFunc
-    func  = Func.panel + centPos;
-	% Name file
-    strFreq = '';
-    for kk = 1:length(f)
-       strFreq = [strFreq  num2str(f(kk)) '_'];
-    end
-    strFreq = strtrim(strFreq);
-    fname = sprintf(['position_function_SOS_T_%1.1f_freq_' strFreq '.mat'],T);
-    save([ root fname], 'func');
+func  = (Func.panel/3.75) + centPos;
+% Name file
+strFreq = '';
+for kk = 1:length(f)
+   strFreq = [strFreq  num2str(f(kk)) '_'];
 end
+strFreq = strtrim(strFreq);
+fname = sprintf(['position_function_SOS_T_%1.1f_freq_' strFreq '.mat'],T);
+save([ root fname], 'func');
 end
 
 %% FUNCTION:    FFT

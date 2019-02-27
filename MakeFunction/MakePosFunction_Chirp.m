@@ -1,4 +1,4 @@
-function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplot,saveFunc)
+function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplot)
 % MakePosFunction_Chirp: makes chirp position function
 %   INPUTS:
 %       root:       :   root directory to save position function file
@@ -17,9 +17,9 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %% DEBUGGING %%
 %---------------------------------------------------------------------------------------------------------------------------------
 % clear ; close all ; clc
-% root        = 'Q:\Box Sync\Git\Fly-Head\Patterns\';
+% root        = 'C:\BC\Git\Arena\Functions\';
 % FI          = 0.1;
-% FE          = 6;
+% FE          = 12;
 % A           = 15;
 % T           = 20;
 % Fs          = 100;
@@ -39,7 +39,7 @@ else
     error('rmp must be 1 or -1')
 end
 
-Func.panel = 3.75*round(Func.deg/3.75); % convert deg to panel position
+Func.panel = 3.75*round(Func.deg/3.75); % convert to setps [deg]
 % Chirp Position Plot
 if showplot
     figure ; clf ; hold on ; box on ; title('Chirp Position')
@@ -77,11 +77,9 @@ end
 
 %% Save Fucntion %%
 %---------------------------------------------------------------------------------------------------------------------------------
-if saveFunc
-    func  = Func.panel + centPos;
-    fname = sprintf('position_function_%s_Chirp_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
-    save([root fname], 'func');
-end
+func  = (Func.panel/3.75) + centPos; % convert to panel adress
+fname = sprintf('position_function_%s_Chirp_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
+save([root fname], 'func');
 end
 
 %% FUNCTION:    FFT
