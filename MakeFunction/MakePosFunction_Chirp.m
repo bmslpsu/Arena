@@ -16,17 +16,17 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %       - 
 %% DEBUGGING %%
 %---------------------------------------------------------------------------------------------------------------------------------
-% clear ; close all ; clc
-% root        = 'C:\BC\Git\Arena\Functions\';
-% FI          = 0.1;
-% FE          = 12;
-% A           = 15;
-% T           = 20;
-% Fs          = 100;
-% centPos     = 15;
-% rmp         = 1;
-% method      = 'Linear';
-% showplot    = 1;
+clear ; close all ; clc
+root        = 'C:\BC\Git\Arena\Functions\';
+FI          = 0.1;
+FE          = 12;
+A           = 15;
+T           = 20;
+Fs          = 100;
+centPos     = 15;
+rmp         = 1;
+method      = 'Linear';
+showplot    = 1;
 %% Generate Chirp Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
@@ -74,7 +74,12 @@ if showplot
     	plot([FI FI],[min(Phase1) max(Phase1)],'--r')
         xlim([0 FE+0.1*FE])
 end
-
+%% Spectogram %%
+%---------------------------------------------------------------------------------------------------------------------------------
+if showplot
+    spectrogram(Func.deg,100,80,100,Fs,'yaxis')
+    rotate3d on
+end
 %% Save Fucntion %%
 %---------------------------------------------------------------------------------------------------------------------------------
 func  = (Func.panel/3.75) + centPos; % convert to panel adress
