@@ -67,6 +67,11 @@ end
 % Create structure to store frames
 MOV(1:nFrame) = struct('cdata', [], 'colormap',[]);
 
+% Create video object
+VID = VideoWriter([root.mov dirName '.avi'],'Uncompressed AVI');
+VID.FrameRate = Fly.Fs;
+open(VID)
+
 FIG = figure ; clf % main figure window for display & export
 set(gcf, 'color', 'k');
 set(FIG, 'Renderer','OpenGL');
@@ -141,6 +146,9 @@ for jj = 1:nFrame % for each frame
     % Store frame
     MOV(pp) = getframe(FIG);
     
+    % Write video
+	writeVideo(VID,getframe(FIG));
+
     % Export video to images
     if export
         filename = sprintf('image%04d.jpg', pp);
@@ -149,7 +157,7 @@ for jj = 1:nFrame % for each frame
 
     pp = pp + 1;
 end
-
+close(VID)
 % Save movie as .mat file
 if export
     Fs = Fly.Fs;
