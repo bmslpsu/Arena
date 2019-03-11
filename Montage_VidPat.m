@@ -8,10 +8,10 @@ function [MOV] = Montage_VidPat(rootdir,rootpat,export)
 %       - 
 %---------------------------------------------------------------------------------------------------------------------------------
 % Example Input %
-clear ; clc ; close all
-export = true;
-rootdir = 'H:\EXPERIMENTS\Experiment_Sinusoid\18.75\';
-rootpat = 'Q:\Box Sync\Git\Arena\Patterns\';
+% clear ; clc ; close all
+% export = true;
+% rootdir = 'H:\EXPERIMENTS\Experiment_Sinusoid\18.75\';
+% rootpat = 'Q:\Box Sync\Git\Arena\Patterns\';
 %---------------------------------------------------------------------------------------------------------------------------------
 % Set directories
 root.pat    = rootpat; % pattern location
@@ -44,7 +44,7 @@ Fly.time = t_v; % video time
 Fly.Fs = round(1/mean(diff(Fly.time)));
 [Fly.xP,Fly.yP,nFrame] = size(Fly.vid ); % get size of video
 center = [round(Fly.yP/2) , round(Fly.xP/2)+55]; % center point for pattern & fly
-radius.center = floor(max([Fly.yP Fly.xP])/1.6); % radius of pattern
+radius.center = floor(max([Fly.yP Fly.xP])/1.45); % radius of pattern
 radius.width = 10; % radius display width
 rin  = radius.center - radius.width;
 rout = radius.center + radius.width;
@@ -55,12 +55,11 @@ Pat.pos = round((96/10)*(data(:,2)-mean(0))); % pattern position
 Pat.time = t_p; % pattern time
 Pat.int = interp1(Pat.time, Pat.pos, Fly.time, 'nearest'); % interpolate pattern to match fly video
 
-try % get head rotation point if not found
-    hCenter = hCenter;
-catch
+if exist('hCenter','var')~=1 % get head rotation point if not found
     figure ; clf ; hold ; title('Select head rotation point, press space when done')
     imshow(Fly.vid(:,:,1))
     hp = impoint();
+    pause
     hCenter = getPosition(hp);
 end
 
@@ -94,11 +93,11 @@ for jj = 1:nFrame % for each frame
     % Display fly video
     subplot(12,1,1:8) ; cla ; hold on; axis square
     imshow(DISP); hold on
-    hTipX = hCenter(1) + 40*sind(hAngles(jj));
-    hTipY = hCenter(2) - 40*cosd(hAngles(jj));
+    hTipX = hCenter(1) + 300*sind(hAngles(jj));
+    hTipY = hCenter(2) - 300*cosd(hAngles(jj));
     plot([hCenter(1),hTipX],[hCenter(2),hTipY],'-b','LineWidth',2)
-%     plot(hCenter(1),hCenter(2),'ob')
-%     plot(x1,y1,'c.') % display center point
+    plot(hCenter(1),hCenter(2),'oc','MarkerSize',2)
+    plot(x1,y1,'r.','MarkerSize',1) % display center point
 
     % Make pattern ring
     for kk = 1:length(theta_ALL)
@@ -112,7 +111,8 @@ for jj = 1:nFrame % for each frame
         youtN = y1 + rout*sin(theta_ALL(kk) + sA);
         
         if sum(ismember(theta, theta_ALL(kk))) == 1 % if lit
-            patch([xout, xoutN, xinN, xin], [yout, youtN,yinN, yin],'g','linestyle','none');
+            patch([xout, xoutN, xinN, xin], [yout, youtN,yinN, yin],'g','linestyle','none',...
+                'FaceAlpha',pat(kk)*(1/(2^(pattern.gs_val)-1)));
         else % if dark
             patch([xout, xoutN, xinN, xin], [yout, youtN,yinN, yin],'k','linestyle','none');
         end
@@ -146,22 +146,21 @@ for jj = 1:nFrame % for each frame
     % Store frame
     MOV(pp) = getframe(FIG);
     
-    % Write video
-	writeVideo(VID,getframe(FIG));
-
-    % Export video to images
     if export
+        % Export frame to image
         filename = sprintf('image%04d.jpg', pp);
         export_fig(gcf, [root.image '\' filename], '-q95','-nocrop');
+        % Write frame to .avi
+        writeVideo(VID,getframe(FIG));
     end
 
     pp = pp + 1;
 end
-close(VID)
-% Save movie as .mat file
+
 if export
+    close(VID) % close .avi
     Fs = Fly.Fs;
-	save([root.mov dirName '.mat'],'MOV','Fs','-v7.3','-nocompression')
+	save([root.mov dirName '.mat'],'MOV','Fs','-v7.3','-nocompression') % save movie as .mat file
 end
 
 end
