@@ -29,11 +29,13 @@ root.head   = [root.vid 'Angles\']; % head angles location
     'Select PATTERN file', root.pat, 'MultiSelect','off');
 
 % Load data
+disp('Loading Data...')
 data = [];
 load([root.pat FILE.pat],'pattern') % load pattern
 load([root.daq FILE.ang],'data','t_p') % load pattern position
 load([root.vid FILE.ang],'vidData','t_v') % load video
 load([root.head FILE.ang],'hAngles','hCenter') % load angles
+disp('DONE')
 
 [~,dirName,~] = fileparts([root.head FILE.ang]); % get file name
 root.mov = [root.daq 'Movie\'];
