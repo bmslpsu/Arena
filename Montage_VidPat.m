@@ -1,17 +1,19 @@
-function [MOV] = Montage_VidPat(rootdir,rootpat,export)
+function [MOV] = Montage_VidPat(rootdir,rootpat,export,vidFs)
 %% MakePosFunction_Chirp: makes chirp position function
 %   INPUTS:
 %       rootdir     : directory containing DAQ,VID,ANGLE files
 %       rootpat     : directory containing PATTERN files
 %       export      : boolean (1=export video to images)
+%       vidFs       : video display FPS
 %   OUTPUTS:
 %       - 
 %---------------------------------------------------------------------------------------------------------------------------------
 % Example Input %
-% clear ; clc ; close all
-% export = true;
-% rootdir = 'H:\EXPERIMENTS\Experiment_Sinusoid\18.75\';
-% rootpat = 'Q:\Box Sync\Git\Arena\Patterns\';
+clear ; clc ; close all
+export = true;
+vidFs = 100;
+rootdir = 'H:\EXPERIMENTS\Experiment_Sinusoid\15\';
+rootpat = 'Q:\Box Sync\Git\Arena\Patterns\';
 %---------------------------------------------------------------------------------------------------------------------------------
 % Set directories
 root.pat    = rootpat; % pattern location
@@ -79,7 +81,8 @@ subplot(12,1,1:8) ; cla ; hold on; axis square % for fly & pattern vid
 subplot(12,1,9:10)  ; cla ; hold on ; h1 = animatedline('Color','g','LineWidth',2); % for pattern angle
 subplot(12,1,11:12) ; cla ; hold on ; h2 = animatedline('Color','b','LineWidth',2); % for head angle
 pp = 1;
-for jj = 1:nFrame % for each frame    
+iter = round(Fly.Fs/vidFs);
+for jj = 1:iter:nFrame % for each frame    
 	pat = pattern.Pats(1,:,round(Pat.int(jj)),4); % top row of pattern
 	patS = circshift(pat,[0 15]); % shift pattern to fly reference frame
     
