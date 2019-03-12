@@ -1,19 +1,19 @@
 function [MOV] = Montage_VidPat(rootdir,rootpat,export,vidFs)
 %% MakePosFunction_Chirp: makes chirp position function
-%   INPUTS:
+%   INPUT:
 %       rootdir     : directory containing DAQ,VID,ANGLE files
 %       rootpat     : directory containing PATTERN files
 %       export      : boolean (1=export video to images)
 %       vidFs       : video display FPS
-%   OUTPUTS:
+%   OUTPUT:
 %       - 
 %---------------------------------------------------------------------------------------------------------------------------------
 % Example Input %
-clear ; clc ; close all
-export = true;
-vidFs = 100;
-rootdir = 'H:\EXPERIMENTS\Experiment_Sinusoid\15\';
-rootpat = 'Q:\Box Sync\Git\Arena\Patterns\';
+% clear ; clc ; close all
+% export = true;
+% vidFs = 50;
+% rootdir = 'H:\EXPERIMENTS\Experiment_Sinusoid\15\';
+% rootpat = 'Q:\Box Sync\Git\Arena\Patterns\';
 %---------------------------------------------------------------------------------------------------------------------------------
 % Set directories
 root.pat    = rootpat; % pattern location
@@ -37,9 +37,10 @@ load([root.vid FILE.ang],'vidData','t_v') % load video
 load([root.head FILE.ang],'hAngles','hCenter') % load angles
 disp('DONE')
 
+% Create directories
 [~,dirName,~] = fileparts([root.head FILE.ang]); % get file name
-root.mov = [root.daq 'Movie\'];
-root.image = [root.daq 'Movie\' dirName];
+root.mov = [root.daq 'Movie\']; % movie directory
+root.image = [root.daq 'Movie\' dirName]; % image directory
 mkdir(root.image) % create directory for export images
 
 % Get video, pattern, position, & angles data 
@@ -47,7 +48,7 @@ Fly.vid = squeeze(vidData); % raw trial video data
 Fly.time = t_v; % video time
 Fly.Fs = round(1/mean(diff(Fly.time)));
 [Fly.xP,Fly.yP,nFrame] = size(Fly.vid ); % get size of video
-center = [round(Fly.yP/2) , round(Fly.xP/2)+55]; % center point for pattern & fly
+center = [round(Fly.yP/2) , round(Fly.xP/2)+45]; % center point for pattern & fly
 radius.center = floor(max([Fly.yP Fly.xP])/1.45); % radius of pattern
 radius.width = 10; % radius display width
 rin  = radius.center - radius.width;
@@ -59,7 +60,8 @@ Pat.pos = round((96/10)*(data(:,2)-mean(0))); % pattern position
 Pat.time = t_p; % pattern time
 Pat.int = interp1(Pat.time, Pat.pos, Fly.time, 'nearest'); % interpolate pattern to match fly video
 
-if exist('hCenter','var')~=1 % get head rotation point if not found
+% Get head rotation point if not found
+if exist('hCenter','var')~=1 
     figure ; clf ; hold ; title('Select head rotation point, press space when done')
     imshow(Fly.vid(:,:,1))
     hp = impoint();
@@ -72,7 +74,7 @@ MOV(1:nFrame) = struct('cdata', [], 'colormap',[]);
 
 % Create video object
 VID = VideoWriter([root.mov dirName '.avi'],'Uncompressed AVI');
-VID.FrameRate = Fly.Fs;
+VID.FrameRate = vidFs;
 open(VID)
 
 FIG = figure ; clf % main figure window for display & export
@@ -84,9 +86,10 @@ subplot(12,1,9:10)  ; cla ; hold on ; h1 = animatedline('Color','g','LineWidth',
 subplot(12,1,11:12) ; cla ; hold on ; h2 = animatedline('Color','b','LineWidth',2); % for head angle
 pp = 1;
 iter = round(Fly.Fs/vidFs);
+disp('Exporting Video...')
 for jj = 1:iter:nFrame % for each frame    
 	pat = pattern.Pats(1,:,round(Pat.int(jj)),4); % top row of pattern
-	patS = circshift(pat,[0 15]); % shift pattern to fly reference frame
+	patS = circshift(pat,[0 0]); % shift pattern to fly reference frame
     
     I = find(patS~=0);
     theta = (I.*3.75) .* (2*pi/360); % lit pixels
@@ -98,8 +101,8 @@ for jj = 1:iter:nFrame % for each frame
     % Display fly video
     subplot(12,1,1:8) ; cla ; hold on; axis square
     imshow(DISP); hold on
-    hTipX = hCenter(1) + 300*sind(hAngles(jj));
-    hTipY = hCenter(2) - 300*cosd(hAngles(jj));
+    hTipX = hCenter(1) + rout*sind(hAngles(jj));
+    hTipY = hCenter(2) - rout*cosd(hAngles(jj));
     plot([hCenter(1),hTipX],[hCenter(2),hTipY],'-b','LineWidth',2)
     plot(hCenter(1),hCenter(2),'oc','MarkerSize',2)
     plot(x1,y1,'r.','MarkerSize',1) % display center point
@@ -158,14 +161,14 @@ for jj = 1:iter:nFrame % for each frame
         % Write frame to .avi
         writeVideo(VID,getframe(FIG));
     end
-
     pp = pp + 1;
 end
-
+disp('DONE')
+disp('Saving...')
 if export
     close(VID) % close .avi
     Fs = Fly.Fs;
 	save([root.mov dirName '.mat'],'MOV','Fs','-v7.3','-nocompression') % save movie as .mat file
 end
-
+disp('DONE')
 end
