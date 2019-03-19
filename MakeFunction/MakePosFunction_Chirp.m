@@ -1,5 +1,5 @@
 function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplot)
-% MakePosFunction_Chirp: makes chirp position function
+%% MakePosFunction_Chirp: makes chirp position function
 %   INPUTS:
 %       root:       :   root directory to save position function file
 %       FI          :   start frequency [Hz]
@@ -16,21 +16,24 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %       - 
 %% DEBUGGING %%
 %---------------------------------------------------------------------------------------------------------------------------------
-clear ; close all ; clc
-root        = 'C:\BC\Git\Arena\Functions\';
-FI          = 0.1;
-FE          = 12;
-A           = 15;
-T           = 20;
-Fs          = 100;
-centPos     = 15;
-rmp         = 1;
-method      = 'Linear';
-showplot    = 1;
+% clear ; close all ; clc
+% root        = 'C:\BC\Git\Arena\Functions\';
+% FI          = 0.1;
+% FE          = 12;
+% A           = 15;
+% T           = 20;
+% Fs          = 200;
+% centPos     = 15;
+% rmp         = 1;
+% method      = 'Logarithmic';
+% showplot    = 1;
 %% Generate Chirp Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
-Func.deg = A*chirp(tt,FI,T,FE,method); % chirp signal [deg]
+% Func.deg = A*chirp(tt,FI,T,FE,method); % chirp signal [deg]
+phi = 0;
+instPhi = T/log(FE/FI)*(FI*(FE/FI).^(tt/T)-FI);
+Func.deg = A*sin(2*pi * (instPhi + phi/360)); % chirp signal [deg]
 
 if rmp==1
 elseif rmp==-1
@@ -77,13 +80,16 @@ end
 %% Spectogram %%
 %---------------------------------------------------------------------------------------------------------------------------------
 if showplot
+    figure (3) ; clf
     spectrogram(Func.deg,100,80,100,Fs,'yaxis')
+    ylim([0 FE+1])
+    xlim([0 T])
     rotate3d on
 end
 %% Save Fucntion %%
 %---------------------------------------------------------------------------------------------------------------------------------
 func  = (Func.panel/3.75) + centPos; % convert to panel adress
-fname = sprintf('position_function_%s_Chirp_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
+fname = sprintf('position_function_Chirp_%s_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
 save([root fname], 'func');
 end
 
