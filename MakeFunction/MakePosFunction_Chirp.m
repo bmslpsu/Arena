@@ -17,7 +17,7 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %% DEBUGGING %%
 %---------------------------------------------------------------------------------------------------------------------------------
 % clear ; close all ; clc
-% root        = 'C:\BC\Git\Arena\Functions\';
+% root        = 'Q:\Box Sync\Git\Arena\Functions\';
 % FI          = 0.1;
 % FE          = 12;
 % A           = 15;
@@ -91,28 +91,4 @@ end
 func  = (Func.panel/3.75) + centPos; % convert to panel adress
 fname = sprintf('position_function_Chirp_%s_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
 save([root fname], 'func');
-end
-
-%% FUNCTION:    FFT
-function [Fv, Mag , Phase] = FFT(t,x)
-%---------------------------------------------------------------------------------------------------------------------------------
-% FFT: Transforms time domian data to frequency domain
-    % INPUTS:
-        % t: time data
-        % x: pos/vel data
-	% OUTPUTS
-        % Fv: frequency vector
-        % Mag: magniude of fft
-        % Phase: phase of fft
-%---------------------------------------------------------------------------------------------------------------------------------      
-    Fs = 1/(mean(diff(t)));                 % Sampling frequency [Hz]
-    L = length(t);                          % Length of signal
-    Fn = Fs/2;                           	% Nyquist Frequency
-    fts = fft(x)/L;                        	% Normalised Fourier Transform
-    Fv = (linspace(0, 1, fix(L/2)+1)*Fn)';  % Frequency Vector
-    Iv = 1:length(Fv);                  	% Index Vector
-    
-    Mag = abs(fts(Iv))*2;                   % Magnitude
-    Phase = (angle(fts(Iv)));               % Phase
-%---------------------------------------------------------------------------------------------------------------------------------
 end
