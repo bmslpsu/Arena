@@ -30,10 +30,10 @@ function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplo
 %% Generate Chirp Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
-% Func.deg = A*chirp(tt,FI,T,FE,method); % chirp signal [deg]
-phi = 0;
-instPhi = T/log(FE/FI)*(FI*(FE/FI).^(tt/T)-FI);
-Func.deg = A*sin(2*pi * (instPhi + phi/360)); % chirp signal [deg]
+Func.deg = A*chirp(tt,FI,T,FE,method); % chirp signal [deg]
+% phi = 0;
+% instPhi = T/log(FE/FI)*(FI*(FE/FI).^(tt/T)-FI);
+% Func.deg = A*cos(2*pi * (instPhi + phi/360)); % chirp signal [deg]
 
 if rmp==1
 elseif rmp==-1
