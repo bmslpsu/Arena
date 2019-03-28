@@ -34,12 +34,12 @@ if nargin==3
     Contrast = MichContr(Lmax,Lmin);
     varargout{1} = Contrast;
 elseif (nargin==2) || (nargin>2)
-    error('Input options include: grey scale value + two intensity values OR zero inputs')
+    error('Input options include: grey scale value OR grey scale value + two intensity values')
 elseif (nargin==1)
     LUM_levels   = Int_to_Lum(INT_levels); % luminance corresponding to each intensity level for gs=4
 
     % Luminance vs LED Intensity Settings
-    figure (1) ; clf ; hold on ; grid on ; grid minor ; box on
+    figure ; clf ; hold on ; grid on ; grid minor ; box on
     title('Luminance vs LED Intensity Settings')
     xlabel(['LED Display Intensity Level (gs=' num2str(gs) ')'],'FontSize',14,'interpreter','latex')
     ylabel('Luminance $[cd*m^{-2}]$','FontSize',16,'interpreter','latex')
@@ -76,7 +76,7 @@ elseif (nargin==1)
     [X,Y] = meshgrid(Imin,Imax);
     [Z] = (Y-X)./(Y+X);
     Z(Z<0) = nan;
-    figure (2) ; clf
+    figure ; clf
     surf(X,Y,Z)
 %     mesh(X,Y,Z)
     title('Michelson Contrast')
