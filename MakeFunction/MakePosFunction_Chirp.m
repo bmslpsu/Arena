@@ -89,6 +89,6 @@ end
 %% Save Fucntion %%
 %---------------------------------------------------------------------------------------------------------------------------------
 func  = (Func.panel/3.75) + centPos; % convert to panel adress
-fname = sprintf('position_function_Chirp_%s_amp_%1.1f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
+fname = sprintf('position_function_Chirp_%s_amp_%1.2f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
 save([root fname], 'func');
 end
