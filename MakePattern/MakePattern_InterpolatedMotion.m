@@ -83,26 +83,26 @@ InitPat = repmat([Int.Low*ones(pixelY,Steps*(Period/2)), ... % matrix to average
 
 % Assign x-channel frames
 temp_Pats(:,:,1) = InitPat;
-for j = 2:pattern.x_num
-    temp_Pats(:,:,j) = ShiftMatrix(temp_Pats(:,:,j - 1), 1,'r','y');       
+for jj = 2:pattern.x_num
+    temp_Pats(:,:,jj) = ShiftMatrix(temp_Pats(:,:,jj - 1), 1,'r','y');       
 end
 
 % Make first set of expansion pats
-for j = 1:pattern.y_num
-    for i = 1:pattern.x_num
-        Pats(:,i,1,j) = round(sum(temp_Pats(:,((i*Steps)-(Steps-1)):i*Steps,j),2)./Steps);
+for jj = 1:pattern.y_num
+    for ii = 1:pattern.x_num
+        Pats(:,ii,1,jj) = round(sum(temp_Pats(:,((ii*Steps)-(Steps-1)):ii*Steps,jj),2)./Steps);
     end
 end    
 
-for j = 1:pattern.y_num
-    for i = 2:pattern.x_num
-        Pats(:,:,i,j) = ShiftMatrix(Pats(:,:,i-1,j), 1, 'r', 'y'); 
+for jj = 1:pattern.y_num
+    for ii = 2:pattern.x_num
+        Pats(:,:,ii,jj) = ShiftMatrix(Pats(:,:,ii-1,jj), 1, 'r', 'y'); 
     end
 end
 
-for j = 1:pattern.y_num   % shifts pattern so it is centered
-    for i = 1:pattern.x_num
-        Pats(:,:,i,j) = ShiftMatrix(Pats(:,:,i,j), 3, 'l', 'y'); 
+for jj = 1:pattern.y_num   % shifts pattern so it is centered
+    for ii = 1:pattern.x_num
+        Pats(:,:,ii,jj) = ShiftMatrix(Pats(:,:,ii,jj), 3, 'l', 'y'); 
     end
 end
 %% Play Pattern %%

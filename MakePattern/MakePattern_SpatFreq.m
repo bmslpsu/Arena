@@ -51,7 +51,7 @@ pattern.x_panel = pattern.x_num;
 pattern.y_panel = pattern.num_panels*8/pattern.x_num;
 Int.High = 15; % high intensity value (0-15)
 Int.Low = 0;  % low intensity value (0-15)
-%% Make PATS %% d
+%% Make PATS %%
 %---------------------------------------------------------------------------------------------------------------------------------
 % Calculate bar widths
 barwidth = zeros(1,pattern.y_num);
@@ -84,9 +84,9 @@ for jj = 1:pattern.y_num
 end
 
 % Make x-channel
-for j = 1:pattern.y_num
-    for i = 2:pattern.x_num
-        Pats(:,:,i,j) = ShiftMatrix(Pats(:,:,i-1,j), 1, 'r', 'y'); 
+for jj = 1:pattern.y_num
+    for ii = 2:pattern.x_num
+        Pats(:,:,ii,jj) = ShiftMatrix(Pats(:,:,ii-1,jj), 1, 'r', 'y'); 
     end
 end
 
