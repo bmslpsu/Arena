@@ -8,7 +8,7 @@ function [] = MakeBatch()
 %% Make Chirp Functions
 %---------------------------------------------------------------------------------------------------------------------------------
 clear ; close all ; clc
-root        = 'Q:\Box Sync\Git\Arena\Functions\';
+root        = 'C:\BC\Git\Arena\Functions\';
 FI          = 0.1;
 FE          = 12;
 A           = 3.75*[2 3 4 5];
@@ -28,7 +28,7 @@ end
 %% Make SOS Functions
 %---------------------------------------------------------------------------------------------------------------------------------
 clear ; close all ; clc
-root        = 'Q:\Box Sync\Git\Arena\Functions\';
+root        = 'C:\BC\Git\Arena\Functions\';
 F           = [0.1 8];
 N           = 10;
 a1        	= 5;

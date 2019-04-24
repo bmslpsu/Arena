@@ -29,7 +29,7 @@ function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot)
 tt = (0:1/Fs:T)';  % time vector [s]
 % f = logspace((log(F(1))/log(10)),(log(F(2))/log(10)),N)'; % logarithmically spaced frequency vector [Hz]
 f = linspace(F(1),F(2),N); % linearly spaced frequency vector [Hz]
-f = 0.05*round(f/0.05); % round frequencies to prime harmonics [Hz]
+f = 0.1*round(f/0.1); % round frequencies to prime harmonics [Hz]
 Phase = deg2rad(randi(359,N,1)); % random initial phase [deg]
 
 X = zeros(length(tt),1);
