@@ -55,21 +55,29 @@ if showplot
     [Fv1, Mag1 , Phase1] = FFT(tt,Func.deg);
     [Fv2, Mag2 , Phase2] = FFT(tt,Func.panel);
     
-    subplot(211) ; hold on ; box on
+    ax = subplot(211) ; hold on ; box on
         ylabel('Magnitude (deg)')
         xlabel('Frequency (Hz)')
-        plot(Fv1,Mag1,'k','LineWidth',2);
-        plot(Fv2,Mag2,'b','LineWidth',1);
+        h1 = plot(Fv1,Mag1,'k','LineWidth',1);
+        h2 = plot(Fv2,Mag2,'b','LineWidth',1);
         xlim([0 F(2)+1])
-    	legend('deg','panel')
+        ax.XTick = f;
+%         ax.XTick = sort(unique([f(:);ax.XTick(:)]))';
+    	
+        for kk = 1:N
+           plot([f(kk) f(kk)],6*[0 1] , '--r')
+        end
+        
+        legend([h1 h2],'deg','panel')
 
-    subplot(212) ; hold on ; box on
+    ax = subplot(212) ; hold on ; box on
         ylabel('Phase (rad)')
         xlabel('Frequency (Hz)')
-        plot(Fv1,Phase1,'k','LineWidth',2);
+        plot(Fv1,Phase1,'k','LineWidth',1);
         plot(Fv2,Phase2,'b','LineWidth',1);
         xlim([0 F(2)+1])
-        xticks(f)
+        ax.XTick = f;
+%         ax.XTick = sort(unique([f(:);ax.XTick(:)]))';
         
         for kk = 1:N
            plot([f(kk) f(kk)],6*[-1 1] , '--r')
