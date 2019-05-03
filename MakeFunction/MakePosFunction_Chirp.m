@@ -1,4 +1,4 @@
-function [] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplot)
+function [func] = MakePosFunction_Chirp(root,FI,FE,A,T,Fs,centPos,rmp,method,showplot)
 %% MakePosFunction_Chirp: makes chirp position function
 %   INPUTS:
 %       root:       :   root directory to save position function file

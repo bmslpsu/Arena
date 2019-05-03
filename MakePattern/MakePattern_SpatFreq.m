@@ -1,4 +1,4 @@
-function [] = MakePattern_SpatFreq(freq,root,savePat)
+function [pattern] = MakePattern_SpatFreq(freq,root)
 %---------------------------------------------------------------------------------------------------------------------------------
 % MakePattern_SpatFreq: makes pattern with two channels
 % Channel-X: changes spatial frequency
@@ -92,15 +92,14 @@ end
 
 %% Save Pattern %%
 %---------------------------------------------------------------------------------------------------------------------------------
-if savePat
-    pattern.Pats = Pats; % store pattern data
-    pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
-                         24 20 16 23 19 15 22 18 14 21 17 13;...
-                         36 32 28 35 31 27 34 30 26 33 29 25;...
-                         48 44 40 47 43 39 46 42 38 45 41 37];
-    pattern.BitMapIndex = process_panel_map(pattern);
-    pattern.data = Make_pattern_vector(pattern);
-    
+pattern.Pats = Pats; % store pattern data
+pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
+                     24 20 16 23 19 15 22 18 14 21 17 13;...
+                     36 32 28 35 31 27 34 30 26 33 29 25;...
+                     48 44 40 47 43 39 46 42 38 45 41 37];
+pattern.BitMapIndex = process_panel_map(pattern);
+pattern.data = make_pattern_vector(pattern);
+if nargin==2
     % Name file
     strFreq = '';
     for kk = 1:length(freq)
