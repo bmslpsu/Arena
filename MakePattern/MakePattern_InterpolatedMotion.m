@@ -1,15 +1,14 @@
-function [] = MakePattern_InterpolatedMotion( root, spatFreq , Steps, playPat , savePat )
-%---------------------------------------------------------------------------------------------------------------------------------
+function [pattern] = MakePattern_InterpolatedMotion( root, spatFreq , Steps, playPat , savePat )
 % MakePattern_InterpolatedMotion: creates pattern for controller V3 using varying contrasts to create apparent motion of the 
 % stimulus
-    % INPUTS:
+%   INPUTS:
         % root      :	folder to save pattern
         % spatFreq  :	specify spatial frequency [deg] (must me in increments of 7.5: 7.5,15,22.5,30, ...)
         % Steps     :	transition steps per cycle (also gain factor for arena panels)
         % playPat   :   boolean to play pattern (1 is on, 0 is off): if any other number >>> playback at that frequency 
         % savePat   :   boolean to save pattern (1 is on, 0 is off)
-  	% OUTPUTS:
-        % -
+%   OUTPUTS:
+        %   -
 %---------------------------------------------------------------------------------------------------------------------------------
 %   This program creates one structure ('pattern').  The relevant components of
 %   this structure are as follows:
@@ -49,6 +48,9 @@ pattern.num_panels = 48;        % # panels in arena
 pattern.gs_val = 4;             % grey-scale #: 4 = 0:15
 pattern.row_compression = 1;    % condense columns  = ON
 pattern.x_num = 96;             % # x-frames
+pattern.x_panel = pattern.x_num;
+pattern.y_panel = 4;
+
 
 pixelX = pattern.x_num;                         % # X pixels
 pixelY = pattern.num_panels/(pattern.x_num/8);  % # Y pixels
@@ -125,15 +127,16 @@ if playPat
 end
 %% Save Pattern %%
 %---------------------------------------------------------------------------------------------------------------------------------
+pattern.Pats = Pats; % store pattern data
+pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
+                     24 20 16 23 19 15 22 18 14 21 17 13;...
+                     36 32 28 35 31 27 34 30 26 33 29 25;...
+                     48 44 40 47 43 39 46 42 38 45 41 37];
+pattern.BitMapIndex = process_panel_map(pattern);
+pattern.data = make_pattern_vector(pattern);
+str = [root '\Pattern_InterpolatedMotion_SpatFreq_' num2str(spatFreq) '_Steps_' num2str(Steps) '_48Pan.mat'];
+
 if savePat
-    pattern.Pats = Pats; % store pattern data
-    pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
-                         24 20 16 23 19 15 22 18 14 21 17 13;...
-                         36 32 28 35 31 27 34 30 26 33 29 25;...
-                         48 44 40 47 43 39 46 42 38 45 41 37];
-    pattern.BitMapIndex = process_panel_map(pattern);
-    pattern.data = make_pattern_vector(pattern);
-    str = [root '\Pattern_InterpolatedMotion_SpatFreq_' num2str(spatFreq) '_Steps_' num2str(Steps) '_48Pan.mat'];
     save(str, 'pattern');
 end
 disp('DONE')

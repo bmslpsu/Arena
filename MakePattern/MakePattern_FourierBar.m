@@ -1,4 +1,4 @@
-function [] = MakePattern_FourierBar(barwidth,root,playPat,savePat)
+function [pattern] = MakePattern_FourierBar(barwidth,root,playPat,savePat)
 %---------------------------------------------------------------------------------------------------------------------------------
 % MakePattern_FourierBar: creates pattern of vertical bars with varying widths
 % stimulus
@@ -39,18 +39,18 @@ function [] = MakePattern_FourierBar(barwidth,root,playPat,savePat)
 %% DEBUGGING %%
 % ONLY UNCOMMENT & RUN THIS SECTION IF DEBUGGING %
 %---------------------------------------------------------------------------------------------------------------------------------
-barwidth = 8;
-root = 'C:\';
-playPat = 1;
-savePat = 0;
+% barwidth = 8;
+% root = 'C:\';
+% playPat = 1;
+% savePat = 0;
 %% Setup Parameters %%
 %---------------------------------------------------------------------------------------------------------------------------------
 %GENERAL PARAMETERS
 pattern.x_num       = 96;   % # of frames in 'x' channel
 pattern.y_num       = 96;   % # of frame in 'y' channel
-pattern.x_panels    = 4;
-pattern.y_panels    = 12;
-pattern.num_panels  = pattern.x_panels*pattern.y_panels;   %number of unique panel IDs required; NOTE: this is a standard size for the 12*4 arena
+pattern.x_panel     = 96;
+pattern.y_panel     = 4;
+pattern.num_panels  = 48;   % number of unique panel IDs required; NOTE: this is a standard size for the 12*4 arena
 pattern.x_size      = 8;
 pattern.y_size      = 8;
 pattern.gs_val      = 1;
@@ -134,15 +134,15 @@ if playPat
 end
 %% Save Pattern %%
 %---------------------------------------------------------------------------------------------------------------------------------
+pattern.Pats = Pats; % store pattern data
+pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
+                     24 20 16 23 19 15 22 18 14 21 17 13;...
+                     36 32 28 35 31 27 34 30 26 33 29 25;...
+                     48 44 40 47 43 39 46 42 38 45 41 37];
+pattern.BitMapIndex = process_panel_map(pattern);
+pattern.data = make_pattern_vector(pattern);
+str = [root '\Pattern_RandomGround_48Pan.mat'];
 if savePat
-    pattern.Pats = Pats; % store pattern data
-    pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
-                         24 20 16 23 19 15 22 18 14 21 17 13;...
-                         36 32 28 35 31 27 34 30 26 33 29 25;...
-                         48 44 40 47 43 39 46 42 38 45 41 37];
-    pattern.BitMapIndex = process_panel_map(pattern);
-    pattern.data = make_pattern_vector(pattern);
-    str = [root '\Pattern_RandomGround_48Pan.mat'];
     save(str, 'pattern');
 end
 disp('DONE')
