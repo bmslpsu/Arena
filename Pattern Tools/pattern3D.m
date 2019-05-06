@@ -19,9 +19,9 @@ function [] = pattern3D(pattern,func)
 
 off = 8;
 Fs = 50;
-% [pattern] = MakePattern_SpatFreq(30);
+[pattern] = MakePattern_SpatFreq(30);
 % [pattern] = MakePattern_InterpolatedMotion( '', 30 , 5, false , false );
-[pattern] = MakePattern_FourierBar(8,'',false,false);
+% [pattern] = MakePattern_FourierBar(8,'',false,false);
 [func] = MakePosFunction_Chirp('',1,10,18.75,20,Fs,40,1,'Logarithmic',false);
 pmap = pattern.Pats(:,1:(pattern.x_panel-off),1,1);
 pmap = repmat(pmap,8,1);
@@ -39,8 +39,7 @@ end
 figure (1); set(gcf,'Color','w')
 clf
 for kk = 1:length(func)
-    intn = circshift(pmap,func(kk),2);
-%     int = pattern.Pats(:,1:(pattern.x_panel-off),func(kk),1);
+    intn = repmat(pattern.Pats(:,1:(pattern.x_panel-off),func(kk)),8,1);
     surf(x,y,z,intn); hold on
     plot3(mean(mean(x)),mean(mean(y)),mean(mean(z)),'*r')
     colormap(cmap)
