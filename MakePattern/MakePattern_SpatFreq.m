@@ -45,8 +45,8 @@ pattern.gs_val = 1;                                     % pattern will use 2 int
 pattern.row_compression = 1;                            % columns are symmetric
 pattern.x_panel = pattern.x_num;                        % x-leds
 pattern.y_panel = pattern.num_panels*8/pattern.x_num;   % y-leds
-Int.High = 1;                                          % high intensity value (0-15)
-Int.Low = 0;                                            % low intensity value (0-15)
+Int.High = 1;                                           % high intensity value (0-15)
+Int.Low  = 0;                                          	% low intensity value (0-15)
 
 % Calculate bar widths
 barwidth = pattern.x_num*(freq./360);
