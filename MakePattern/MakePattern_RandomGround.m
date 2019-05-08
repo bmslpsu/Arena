@@ -1,4 +1,4 @@
-function [] = MakePattern_RandomGround( root, playPat , savePat )
+function [pattern] = MakePattern_RandomGround(root )
 %---------------------------------------------------------------------------------------------------------------------------------
 % MakePattern_RandomGround: creates pattern of vertical bars with varying widths
 % stimulus
@@ -95,34 +95,18 @@ for ii = 1:pattern.y_num
         kk = kk + 1;
     end
 end
-%% Play Pattern %%
-%---------------------------------------------------------------------------------------------------------------------------------
-if playPat
-    h = figure (1) ; clf % pattern window
-    tic           
-    for jj = 1:3 % how many time to loop pattern
-        for kk = 1:size(Pats,3) % play y-channel
-            imagesc(Pats(:,:, kk, 1)) % display frame
-            if 1==playPat % 
-                pause % user clicks to move to next frame
-            else      
-                pause(1/playPat) % automatic frame rate
-            end
-        end
-    end
-    toc
-    close(h)
-end
+
 %% Save Pattern %%
 %---------------------------------------------------------------------------------------------------------------------------------
-if savePat
-    pattern.Pats = Pats; % store pattern data
-    pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
-                         24 20 16 23 19 15 22 18 14 21 17 13;...
-                         36 32 28 35 31 27 34 30 26 33 29 25;...
-                         48 44 40 47 43 39 46 42 38 45 41 37];
-    pattern.BitMapIndex = process_panel_map(pattern);
-    pattern.data = Make_pattern_vector(pattern);
+pattern.Pats = Pats; % store pattern data
+pattern.Panel_map = [12 8 4 11 7 3 10 6 2  9 5 1;...  % store arena panel layout
+                     24 20 16 23 19 15 22 18 14 21 17 13;...
+                     36 32 28 35 31 27 34 30 26 33 29 25;...
+                     48 44 40 47 43 39 46 42 38 45 41 37];
+pattern.BitMapIndex = process_panel_map(pattern);
+pattern.data = Make_pattern_vector(pattern);
+    
+if nargin==1
     str = [root '\Pattern_RandomGround_Cont=' num2str(Int.High) '-' num2str(Int.Low) '_48Pan.mat'];
     save(str, 'pattern');
 end
