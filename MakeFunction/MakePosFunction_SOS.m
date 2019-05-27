@@ -1,4 +1,4 @@
-function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot)
+function [] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
 % MakePosFunction_SOS: makes sum-of-sine position function
 %   INPUTS:
 %       root:       :   root directory to save position function file
@@ -27,14 +27,13 @@ function [] = MakePosFunction_SOS(root,F,N,A,T,Fs,centPos,showplot)
 %% Generate SOS Signal %%
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
-% f = logspace((log(F(1))/log(10)),(log(F(2))/log(10)),N)'; % logarithmically spaced frequency vector [Hz]
-f = linspace(F(1),F(2),N); % linearly spaced frequency vector [Hz]
-f = 0.1*round(f/0.1); % round frequencies to prime harmonics [Hz]
+N = length(F);
+
 Phase = deg2rad(randi(359,N,1)); % random initial phase [deg]
 
 X = zeros(length(tt),1);
 for kk = 1:N
-   X = X + A(kk)*sin(2*pi*f(kk)*tt + Phase(kk)); 
+   X = X + A(kk)*sin(2*pi*F(kk)*tt + Phase(kk)); 
 end
 
 Func.deg = X; % sum-of-sine [deg]
@@ -60,12 +59,12 @@ if showplot
         xlabel('Frequency (Hz)')
         h1 = plot(Fv1,Mag1,'k','LineWidth',1);
         h2 = plot(Fv2,Mag2,'b','LineWidth',1);
-        xlim([0 F(2)+1])
-        ax.XTick = f;
+        xlim([0 F(end)+1])
+        ax.XTick = F;
 %         ax.XTick = sort(unique([f(:);ax.XTick(:)]))';
     	
         for kk = 1:N
-           plot([f(kk) f(kk)],6*[0 1] , '--r')
+           plot([F(kk) F(kk)],6*[0 1] , '--r')
         end
         
         legend([h1 h2],'deg','panel')
@@ -75,12 +74,12 @@ if showplot
         xlabel('Frequency (Hz)')
         plot(Fv1,Phase1,'k','LineWidth',1);
         plot(Fv2,Phase2,'b','LineWidth',1);
-        xlim([0 F(2)+1])
-        ax.XTick = f;
+        xlim([0 F(end)+1])
+        ax.XTick = F;
 %         ax.XTick = sort(unique([f(:);ax.XTick(:)]))';
         
         for kk = 1:N
-           plot([f(kk) f(kk)],6*[-1 1] , '--r')
+           plot([F(kk) F(kk)],6*[-1 1] , '--r')
         end
 end
 %% Spectogram %%
@@ -97,10 +96,12 @@ end
 func  = (Func.panel/3.75) + centPos;
 % Name file
 strFreq = '';
-for kk = 1:length(f)
-   strFreq = [strFreq  num2str(f(kk)) '_'];
+for kk = 1:length(F)
+   strFreq = [strFreq  num2str(F(kk)) '_'];
 end
 strFreq = strtrim(strFreq);
 fname = sprintf(['position_function_SOS_fs_%1.1f_T_%1.1f_freq_' strFreq '.mat'],Fs,T);
+if nargin==8
 save([ root fname], 'func');
+end
 end
