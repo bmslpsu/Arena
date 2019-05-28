@@ -1,4 +1,4 @@
-function [func] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
+function [Func] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
 % MakePosFunction_SOS: makes sum-of-sine position function
 %   INPUTS:
 %       root:       :   root directory to save position function file
