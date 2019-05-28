@@ -1,4 +1,4 @@
-function [] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
+function [func] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
 % MakePosFunction_SOS: makes sum-of-sine position function
 %   INPUTS:
 %       root:       :   root directory to save position function file
@@ -101,7 +101,7 @@ for kk = 1:length(F)
 end
 strFreq = strtrim(strFreq);
 fname = sprintf(['position_function_SOS_fs_%1.1f_T_%1.1f_freq_' strFreq '.mat'],Fs,T);
-if nargin==8
+if nargin==7
 save([ root fname], 'func');
 end
 end

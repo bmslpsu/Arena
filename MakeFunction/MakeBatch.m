@@ -34,12 +34,13 @@ F           = [1 12.3];
 N           = length(F);
 N           = 5;
 % F = logspace((log(F(1))/log(10)),(log(F(2))/log(10)),N)'; % logarithmically spaced frequency vector [Hz]
-F = linspace(F(1),F(2),N); % linearly spaced frequency vector [Hz]
+F = linspace(F(1),F(2),N)'; % linearly spaced frequency vector [Hz]
 F = 0.1*round(F/0.1); % round frequencies to prime harmonics [Hz]
 a1        	= 11.25;
 a2          = 3.75;
-% A           = logspace((log(a1)/log(10)),(log(a2)/log(10)),N)';
-A           = 100./(2*pi*F);
+A           = logspace((log(a1)/log(10)),(log(a2)/log(10)),N)';
+A           = [8;5;ones(3,1)*3.75];
+% A           = 100./(2*pi*F);
 % A           = [11.25 3.75 3.75 3.75 3.75];
 T           = 20;
 Fs          = 200;
@@ -48,5 +49,5 @@ showplot    = true;
 
 vel = 2*pi*F.*A
 
-MakePosFunction_SOS(F,A,T,Fs,centPos,showplot)
+func = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root);
 end
