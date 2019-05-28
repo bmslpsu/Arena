@@ -48,7 +48,7 @@ centPos     = 15;
 showplot    = true;
 
 vel = 2*pi*F.*A
-
+%%
 func = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root);
 
 tt = (0:(1/Fs):T)';
