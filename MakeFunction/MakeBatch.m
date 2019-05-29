@@ -10,8 +10,8 @@ function [] = MakeBatch()
 clear ; close all ; clc
 root        = 'C:\BC\Git\Arena\Functions\';
 FI          = 0.1;
-FE          = 12;
-A           = 3.75*[2 3 4 5];
+FE          = 5;
+A           = 3.75*[10];
 T           = 20;
 Fs          = 200;
 centPos     = 15;
@@ -20,10 +20,16 @@ method      = 'Logarithmic';
 showplot    = true;
 
 for kk = 1:length(A)
-   MakePosFunction_Chirp(root,FI,FE,A(kk),T,Fs,centPos,rmp,method,showplot)
+   Func = MakePosFunction_Chirp(FI,FE,A(kk),T,Fs,centPos,rmp,method,showplot);
    pause(0.5)
-   close all
+%    close all
 end
+
+tt = (0:(1/Fs):T)';
+dv = [0 ; diff(Func.deg)/(1/Fs)];
+
+% figure ; hold on
+% plot(tt,dv)
 
 %% Make SOS Functions
 %---------------------------------------------------------------------------------------------------------------------------------
