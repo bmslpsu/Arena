@@ -31,17 +31,20 @@ function [Func] = MakePosFunction_Chirp(FI,FE,A,T,Fs,centPos,rmp,method,showplot
 %---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
 % Func.deg = A*chirp(tt,FI,T,FE,method); % chirp signal [deg]
-% phi = 0;
-% instPhi = T/log(FE/FI)*(FI*(FE/FI).^(tt/T)-FI);
+phi = 0;
+instPhi = T/log(FE/FI)*(FI*(FE/FI).^(tt/T)-FI);
 % An = flipud(instPhi);
-% Func.deg = A.*cos(2*pi * (instPhi + phi/360)); % chirp signal [deg]
+
+A = logspace((log(93.75)/log(10)),(log(30)/log(10)),length(tt))'; % logarithmically spaced frequency vector [Hz]
+
+Func.deg = A.*cos(2*pi * (instPhi + phi/360)); % chirp signal [deg]
 
 % ff = ((FE-FI).^(tt/T))*FI ;
 % beta = (FE/FI)^(1/T);
 
-ff = ((FE-FI).^(tt/T) + FI) ;
-A = 50./(2*pi*ff);
-Func.deg = A.*cos(2*pi*ff.*tt);
+% ff = ((FE-FI).^(tt/T) + FI) ;
+% A = 50./(2*pi*ff);
+% Func.deg = A.*cos(2*pi*ff.*tt);
 dv = [0;diff(Func.deg)/(1/Fs)];
 
 figure (10) ; plot(tt,dv)
@@ -58,7 +61,7 @@ Func.panel = 3.75*round(Func.deg/3.75); % convert to steps [deg]
 if showplot
     figure ; clf ; hold on ; box on ; title('Chirp Position')
         plot(tt,Func.deg,'k','LineWidth',1)
-%         plot(tt,Func.panel,'b','LineWidth',1)
+        plot(tt,Func.panel,'b','LineWidth',1)
         xlabel('Time (s)')
         legend('deg','panel')
 end
@@ -94,7 +97,8 @@ if showplot
     figure (3) ; clf
 %     spectrogram(Func.deg,300,80,100,Fs,'yaxis')
 %     spectrogram(Func.deg,128,120,128,1e3)
-    [s,f,t] = spectrogram(Func.deg,[],[],0:0.1:8,Fs,'yaxis');
+%     [s,f,t] = spectrogram(Func.deg,[],[],0:0.1:1,Fs,'yaxis');
+    spectrogram(Func.deg,2/(1/Fs),[],0:0.1:3,Fs,'yaxis')
     ylim([0 FE+1])
     xlim([0 T])
     rotate3d on
@@ -102,7 +106,10 @@ end
 %% Save Fucntion %%
 %---------------------------------------------------------------------------------------------------------------------------------
 func  = (Func.panel/3.75) + centPos; % convert to panel adress
-fname = sprintf('position_function_Chirp_%s_amp_%1.2f_freq_%1.1f_%1.1f_fs_%i_T_%1.1f.mat',method,A,FI,FE,Fs,T);
+if length(A)>1
+    Af = nan;
+end
+fname = sprintf('position_function_Chirp_%s_amp_%1.2f_freq_%1.1f_%1.1f_Fs_%i_T_%1.1f.mat',method,Af,FI,FE,Fs,T);
 
 if nargin==10
     save([root fname], 'func');

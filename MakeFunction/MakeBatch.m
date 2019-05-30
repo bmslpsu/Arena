@@ -8,9 +8,9 @@ function [] = MakeBatch()
 %% Make Chirp Functions
 %---------------------------------------------------------------------------------------------------------------------------------
 clear ; close all ; clc
-root        = 'C:\BC\Git\Arena\Functions\';
-FI          = 0.1;
-FE          = 5;
+root        = 'C:\Users\boc5244\Documents\GitHub\Arena\Functions\';
+FI          = 0.5;
+FE          = 2;
 A           = 3.75*[10];
 T           = 20;
 Fs          = 200;
@@ -20,7 +20,7 @@ method      = 'Logarithmic';
 showplot    = true;
 
 for kk = 1:length(A)
-   Func = MakePosFunction_Chirp(FI,FE,A(kk),T,Fs,centPos,rmp,method,showplot);
+   Func = MakePosFunction_Chirp(FI,FE,A(kk),T,Fs,centPos,rmp,method,showplot,root);
    pause(0.5)
 %    close all
 end
