@@ -56,7 +56,7 @@ else
     error('rmp must be 1 or -1')
 end
 
-Func.panel = 3.75*round(Func.deg/3.75); % convert to steps [deg]
+Func.panel = 3.75*round(Func.deg/3.75); % convert to steps [panel #]
 % Chirp Position Plot
 if showplot
     figure ; clf ; hold on ; box on ; title('Chirp Position')
