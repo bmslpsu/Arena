@@ -43,8 +43,8 @@ pattern.y_num = length(freq);                           % # of spatial frequenci
 pattern.num_panels = 48;                                % # of unique panel IDs required
 pattern.gs_val = 1;                                     % pattern will use 2 intensity levels
 pattern.row_compression = 1;                            % columns are symmetric
-pattern.x_panel = pattern.x_num;                        % x-leds
-pattern.y_panel = pattern.num_panels*8/pattern.x_num;   % y-leds
+pattern.x_panel = pattern.x_num;                        % x-led's
+pattern.y_panel = pattern.num_panels*8/pattern.x_num;   % y-led's
 Int.High = 1;                                           % high intensity value (0-15)
 Int.Low  = 0;                                          	% low intensity value (0-15)
 
@@ -100,7 +100,7 @@ pattern.Panel_map = [12 8  4  11 7  3  10 6  2  9  5  1 ;...
 pattern.BitMapIndex = process_panel_map(pattern);
 
 % Make data
-pattern.data = make_pattern_vector(pattern);
+pattern.data = Make_pattern_vector(pattern);
 
 % Save pattern
 if nargin==2
