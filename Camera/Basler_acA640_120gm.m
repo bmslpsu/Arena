@@ -45,7 +45,7 @@ SRC = get(VID, 'Source');
 % SRC.AcquisitionFrameRateAbs = FPS;
 SRC.AcquisitionFrameRateEnable = 'False';
 SRC.Gamma = 0.386367797851563;
-SRC.GainRaw = 600;
+SRC.GainRaw = 750;
 SRC.ExposureTimeAbs = 0.9*(1/FPS)*1e6;
 % SRC.ExposureTimeRaw = 0.9*(1/FPS)*1e6;
 
