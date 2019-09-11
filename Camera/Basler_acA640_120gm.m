@@ -1,8 +1,9 @@
-function [VID,SRC] = Basler_acA640_120gm(FPS,nFrame)
+function [VID,SRC] = Basler_acA640_120gm(FPS,Gain,nFrame)
 %% Basler_acA640_120gm: creates video input object with specififed camera settings
 %   INPUTS:
 %       FPS         :   frame rate
 %       nframe    	:   ftotal frames to log
+%       Gain    	:   gain raw
 %   OUTPUTS:
 %       VID         :   video object
 %       SRC         :   source image stream object
@@ -19,10 +20,15 @@ if ~nargin % defaults
     FPS = 100;
     nFrame = 1;
     trig_mode = 'off';
+    Gain = 700;
 elseif nargin==1 % set FPS
+    Gain = 700;
     nFrame = 1;
-	trig_mode = 'off';
+  	trig_mode = 'off';
 elseif nargin==2 % with trigger
+    nFrame = 1;
+    trig_mode = 'off';
+elseif nargin==3
  	trig_mode = 'on';
     triggerconfig(VID, 'hardware','DeviceSpecific','DeviceSpecific')
 end
@@ -45,8 +51,8 @@ SRC = get(VID, 'Source');
 % SRC.AcquisitionFrameRateAbs = FPS;
 SRC.AcquisitionFrameRateEnable = 'False';
 SRC.Gamma = 0.386367797851563;
-SRC.GainRaw = 750;
-SRC.ExposureTimeAbs = 0.9*(1/FPS)*1e6;
+SRC.GainRaw = Gain;
+SRC.ExposureTimeAbs = 0.95*(1/FPS)*1e6;
 % SRC.ExposureTimeRaw = 0.9*(1/FPS)*1e6;
 
 % Configure Trigger
@@ -58,4 +64,8 @@ SRC.TriggerSelector = 'FrameStart';
 
 fprintf('Basler_acA640_120gm: \n FPS: %i \n Exposure Time: %i \n Gain: %i \n Trigger: %s \n',...
     SRC.AcquisitionFrameRateAbs,SRC.ExposureTimeAbs,SRC.GainRaw,SRC.TriggerMode)
+if strcmp(trig_mode,'on')
+    fprintf(' Frames: %i \n',VID.TriggerRepeat + 1)    
+end
+
 end
