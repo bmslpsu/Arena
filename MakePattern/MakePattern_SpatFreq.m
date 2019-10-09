@@ -1,4 +1,4 @@
-function [pattern] = MakePattern_SpatFreq(freq,root)
+function [pattern] = MakePattern_SpatFreq(freq,root,res)
 %---------------------------------------------------------------------------------------------------------------------------------
 % MakePattern_SpatFreq: makes pattern with two channels
 %  Channel-X: changes spatial frequency
@@ -37,10 +37,14 @@ function [pattern] = MakePattern_SpatFreq(freq,root)
 % freq = 3.75*[0,2,4,6,8,12,16,24,32,48,96];
 % root = 'Q:\Box Sync\Git\Arena\Patterns\';
 %---------------------------------------------------------------------------------------------------------------------------------
+if nargin<3
+    res = 1;
+end
+
 % Set up panel variables 
-pattern.x_num = 96;                                     % 96 pixel around the display (12x8) 
+pattern.x_num = res*96;                                 % pixels around the display (12x8) 
 pattern.y_num = length(freq);                           % # of spatial frequencies
-pattern.num_panels = 48;                                % # of unique panel IDs required
+pattern.num_panels = (pattern.x_num/8)*4;           	% # of unique panel IDs required
 pattern.gs_val = 1;                                     % pattern will use 2 intensity levels
 pattern.row_compression = 1;                            % columns are symmetric
 pattern.x_panel = pattern.x_num;                        % x-led's
@@ -115,5 +119,5 @@ if nargin==2
     
     save(fullfile(root,str), 'pattern');
 end
-disp('DONE')
+% disp('DONE')
 end
