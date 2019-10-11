@@ -1,4 +1,4 @@
-function [pattern] = MakePattern_SpatFreq(freq,root,res)
+function [pattern] = MakePattern_SpatFreq(wavelength,root,res)
 %---------------------------------------------------------------------------------------------------------------------------------
 % MakePattern_SpatFreq: makes pattern with two channels
 %  Channel-X: changes spatial frequency
@@ -43,7 +43,7 @@ end
 
 % Set up panel variables 
 pattern.x_num = res*96;                                 % pixels around the display (12x8) 
-pattern.y_num = length(freq);                           % # of spatial frequencies
+pattern.y_num = length(wavelength);                           % # of spatial frequencies
 pattern.num_panels = (pattern.x_num/8)*4;           	% # of unique panel IDs required
 pattern.gs_val = 1;                                     % pattern will use 2 intensity levels
 pattern.row_compression = 1;                            % columns are symmetric
@@ -53,20 +53,20 @@ Int.High = 1;                                           % high intensity value (
 Int.Low  = 0;                                          	% low intensity value (0-15)
 
 % Calculate bar widths
-barwidth = pattern.x_num*(freq./360);
+barwidth = pattern.x_num*(wavelength./360);
 
 % Calculate # of cycle repetitions for each frequency
-reps = 360./freq;
+reps = 360./wavelength;
 reps(reps==inf) = 96;
 
 % Test if spatial frequencies yield integer barwidths, barwidths are less
 % than the total number of x-leds, & spatial frequencies are factors of 360
-freqTest = round(barwidth)==barwidth & (barwidth<=pattern.x_panel | barwidth==inf) & round(360./freq)==(360./freq);
+freqTest = round(barwidth)==barwidth & (barwidth<=pattern.x_panel | barwidth==inf) & round(360./wavelength)==(360./wavelength);
 badFreq = find(~freqTest);
 if any(~freqTest)
 	err = '';
     for kk = 1:length(badFreq)
-        err = [err,sprintf(['%1.1f' char(176) ' invalid \n'],freq(badFreq(kk)))];
+        err = [err,sprintf(['%1.1f' char(176) ' invalid \n'],wavelength(badFreq(kk)))];
     end
    error([err,'Valid frequencies are factors of 360' char(176) ' & divisible by 7.5' char(176)])    
 end
@@ -110,8 +110,8 @@ pattern.data = Make_pattern_vector(pattern);
 if nargin==2
     % Name file
     strFreq = '';
-    for kk = 1:length(freq)
-       strFreq = [strFreq  num2str(freq(kk)) '_'];
+    for kk = 1:length(wavelength)
+       strFreq = [strFreq  num2str(wavelength(kk)) '_'];
     end
     strFreq = strtrim(strFreq);
 	str = ['Pattern_SpatFreq_' strFreq 'gs=' num2str(pattern.gs_val) ...

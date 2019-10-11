@@ -27,10 +27,10 @@ deg     = 3.75*func;            % panel position [deg]
 fname = ['position_function_Ramp_vel_' num2str(vel) '.mat']; % filename
 
 if nargin>=5
-    save(fullfile(root,fname), 'func')
+%     save(fullfile(root,fname), 'func')
     if nargin==6
         if debug
-            figure (1) ; clf ; hold on
+            figure (106) ; clf ; hold on
             plot(tt,pos,'LineWidth',2)
             plot(tt,deg,'LineWidth',2)
             xlabel('Time (s)')
