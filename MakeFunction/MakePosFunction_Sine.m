@@ -32,12 +32,13 @@ if nargin>=6
     save(fullfile(root,fname), 'func')
     if nargin==7
         if debug
-            figure (1) ; clf ; hold on
+            figure ; clf ; hold on
             plot(tt,pos,'LineWidth',2)
             plot(tt,deg,'LineWidth',2)
             xlabel('Time (s)')
             ylabel(['Position (' char(176) ')'])
             legend('Raw','Panel')
+            hold off
         end
     end
 end
