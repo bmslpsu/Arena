@@ -1,4 +1,4 @@
-function [func,deg,tt] = MakePosFunction_Sine(Freq,A,T,off,Fs,root,debug)
+function [func,deg,tt] = MakePosFunction_Sine(Freq,A,T,off,Fs,debug,root)
 %% MakePosFunction_Sine: make position function for a sinusodial stimulus
 %   INPUTS:
 %       Freq      	:   frequency [Hz]
@@ -29,17 +29,17 @@ deg = 3.75*func; % panel position [deg]
 fname = ['position_function_Sinusoid_Freq_' num2str(Freq) '_Amp_' num2str(A) '_Fs_' num2str(Fs) '.mat']; % filename
 
 if nargin>=6
-    save(fullfile(root,fname), 'func')
+    if debug
+        figure ; clf ; hold on
+        plot(tt,pos,'LineWidth',2)
+        plot(tt,deg,'LineWidth',2)
+        xlabel('Time (s)')
+        ylabel(['Position (' char(176) ')'])
+        legend('Raw','Panel')
+        hold off
+    end
     if nargin==7
-        if debug
-            figure ; clf ; hold on
-            plot(tt,pos,'LineWidth',2)
-            plot(tt,deg,'LineWidth',2)
-            xlabel('Time (s)')
-            ylabel(['Position (' char(176) ')'])
-            legend('Raw','Panel')
-            hold off
-        end
+        save(fullfile(root,fname), 'func')
     end
 end
 end

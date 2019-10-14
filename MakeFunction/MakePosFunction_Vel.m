@@ -1,4 +1,4 @@
-function [func,deg,tt] = MakePosFunction_Vel(vel,T,Fs,wrap,res,root,debug)
+function [func,deg,tt] = MakePosFunction_Vel(vel,T,Fs,wrap,res,debug,root)
 %% MakePosFunction_Vel: make position function for a ramp stimulus
 %   INPUTS:
 %       vel         :   velocity [deg/s]
@@ -13,10 +13,10 @@ function [func,deg,tt] = MakePosFunction_Vel(vel,T,Fs,wrap,res,root,debug)
 %       tt      	:   time vector [s]
 %---------------------------------------------------------------------------------------------------------------------------------
 % tt      = (0:(1/Fs):T)';        % time [s]
-tt      = linspace(0,T,T*Fs);       % time [s]
-pos     = vel*tt;                   % position [deg]
-%pos     = rad2deg(wrapTo2Pi(deg2rad(pos)));
-func    = deg2panel(pos,res) + 1;	% panel position starting from 1 [panel#]
+tt      = linspace(0,T,T*Fs); % time [s]
+pos     = vel*tt; % position [deg]
+% pos     = rad2deg(wrapTo2Pi(deg2rad(pos)));
+func    = deg2panel(pos,res) + 1; % panel position starting from 1 [panel#]
 
 if nargin<5
     res = 3.75;
