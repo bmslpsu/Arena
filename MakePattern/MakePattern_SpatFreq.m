@@ -42,8 +42,8 @@ if nargin<3
 end
 
 % Set up panel variables 
-pattern.x_num = res*96;                                 % pixels around the display (12x8) 
-pattern.y_num = length(wavelength);                           % # of spatial frequencies
+pattern.x_num = res*96;                                 % pixels around the display (12x8)
+pattern.y_num = length(wavelength);                 	% # of spatial frequencies
 pattern.num_panels = (pattern.x_num/8)*4;           	% # of unique panel IDs required
 pattern.gs_val = 1;                                     % pattern will use 2 intensity levels
 pattern.row_compression = 1;                            % columns are symmetric
