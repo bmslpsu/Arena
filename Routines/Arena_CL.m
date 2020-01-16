@@ -7,7 +7,8 @@ function [] = Arena_CL(patID,channel,gain)
 %       gain        :   arena gain
 %   OUTPUTS:
 %       -
-%---------------------------------------------------------------------------------------------------------------------------------
+%
+
 if nargin==3
     gain = -15; % default gain
 end

@@ -1,5 +1,5 @@
-function [VID,SRC] = Basler_acA640_120gm(FPS,Gain,nFrame)
-%% Basler_acA640_120gm: creates video input object with specififed camera settings
+function [VID,SRC] = Basler_acA640_750um(FPS,Gain,nFrame)
+%% Basler_acA640_750um: creates video input object with specififed camera settings
 %   INPUTS:
 %       FPS         :   frame rate
 %       nframe    	:   ftotal frames to log
@@ -12,7 +12,7 @@ function [VID,SRC] = Basler_acA640_120gm(FPS,Gain,nFrame)
 imaqreset
 
 % Create video object
-adaptorName = 'gige';
+adaptorName = 'gentl';
 deviceID = 1;
 vidFormat = 'Mono8';
 VID = videoinput(adaptorName, deviceID, vidFormat);
@@ -21,9 +21,9 @@ if ~nargin % defaults
     FPS = 100;
     nFrame = 1;
     trig_mode = 'off';
-    Gain = 700;
+    Gain = 10;
 elseif nargin==1 % set FPS
-    Gain = 700;
+    Gain = 10;
     nFrame = 1;
   	trig_mode = 'off';
 elseif nargin==2 % with trigger
@@ -35,26 +35,28 @@ elseif nargin==3
 end
 
 % Set vid parameters
-VID.ErrorFcn =  @imaqcallback;
+VID.ErrorFcn = @imaqcallback;
 VID.LoggingMode = 'memory';
 VID.FrameGrabInterval = 1;
 VID.FramesPerTrigger = 1;
 VID.TriggerRepeat = nFrame - 1;
 
 ROI.x = 500;
-ROI.y = 250;
-ROI.xoff = (round(659 - ROI.x)/2);
-ROI.yoff = (round(494 - ROI.y)/2);
+ROI.y = 500;
+ROI.xoff = (round(672 - ROI.x)/2);
+ROI.yoff = (round(512 - ROI.y)/2);
 VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
 
 % Set video source parameters
 SRC = get(VID, 'Source');
-% SRC.AcquisitionFrameRateAbs = FPS;
-SRC.AcquisitionFrameRateEnable = 'False';
-SRC.Gamma = 0.386367797851563;
-SRC.GainRaw = Gain;
-SRC.ExposureTimeAbs = 0.95*(1/FPS)*1e6;
-% SRC.ExposureTimeRaw = 0.9*(1/FPS)*1e6;
+% SRC.CenterX = 'True';
+% SRC.CenterY = 'True';
+SRC.AcquisitionFrameRateEnable = 'True';
+SRC.AcquisitionFrameRate = FPS;
+% SRC.ExposureTime = 0.5667*(1/FPS)*10^(6);
+SRC.ExposureTime = (1/FPS)*10^(6);
+SRC.Gamma = 0.62;
+SRC.Gain = Gain;
 
 % Configure Trigger
 SRC.TriggerMode = trig_mode;
@@ -63,8 +65,8 @@ SRC.TriggerActivation = 'RisingEdge';
 SRC.TriggerSelector = 'FrameStart';
 % SRC.ExposureMode = 'Timed';
 
-fprintf('Basler_acA640_120gm: \n FPS: %i \n Exposure Time: %i \n Gain: %i \n Trigger: %s \n',...
-    SRC.AcquisitionFrameRateAbs,SRC.ExposureTimeAbs,SRC.GainRaw,SRC.TriggerMode)
+fprintf('Basler_acA640_750um: \n FPS: %i \n Frame Rate: %i \n Gain: %i \n Trigger: %s \n',...
+    SRC.AcquisitionFrameRate,SRC.ResultingFrameRate,SRC.Gain,SRC.TriggerMode)
 if strcmp(trig_mode,'on')
     fprintf(' Frames: %i \n',VID.TriggerRepeat + 1)    
 end

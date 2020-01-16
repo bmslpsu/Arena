@@ -7,7 +7,8 @@ function [s,devices] = NI_USB_6212(rate,AI,AO)
 %   OUTPUTS:
 %       s           :   session object
 %       devices    	:   DAQ devices object
-%---------------------------------------------------------------------------------------------------------------------------------
+%
+
 daqreset
 
 devices = daq.getDevices; % get DAQ ID
