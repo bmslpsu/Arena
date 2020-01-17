@@ -41,8 +41,8 @@ VID.FrameGrabInterval = 1;
 VID.FramesPerTrigger = 1;
 VID.TriggerRepeat = nFrame - 1;
 
-ROI.x = 500;
-ROI.y = 500;
+ROI.x = 672;
+ROI.y = 512;
 ROI.xoff = (round(672 - ROI.x)/2);
 ROI.yoff = (round(512 - ROI.y)/2);
 VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
@@ -51,19 +51,20 @@ VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
 SRC = get(VID, 'Source');
 % SRC.CenterX = 'True';
 % SRC.CenterY = 'True';
-SRC.AcquisitionFrameRateEnable = 'True';
-SRC.AcquisitionFrameRate = FPS;
-% SRC.ExposureTime = 0.5667*(1/FPS)*10^(6);
-SRC.ExposureTime = (1/FPS)*10^(6);
-SRC.Gamma = 0.62;
+% SRC.AcquisitionFrameRateEnable = 'False';
+% SRC.AcquisitionFrameRate = FPS;
+% SRC.ExposureTime = (1/FPS)*10^(6);
+SRC.ExposureTime = 9000;
+SRC.Gamma = 0.6199951171875;
 SRC.Gain = Gain;
+SRC.BlackLevel = 0;
 
 % Configure Trigger
 SRC.TriggerMode = trig_mode;
 SRC.LineSelector = 'Line1';
 SRC.TriggerActivation = 'RisingEdge';
 SRC.TriggerSelector = 'FrameStart';
-% SRC.ExposureMode = 'Timed';
+SRC.ExposureMode = 'Timed';
 
 fprintf('Basler_acA640_750um: \n FPS: %i \n Frame Rate: %i \n Gain: %i \n Trigger: %s \n',...
     SRC.AcquisitionFrameRate,SRC.ResultingFrameRate,SRC.Gain,SRC.TriggerMode)

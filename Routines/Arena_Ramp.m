@@ -6,8 +6,6 @@ function [] = Arena_Ramp(patID,gain)
 %       -
 %
 
-cycles = round(time/period);
-
 % Pick random direction
 dir = 0;
 while dir==0
@@ -19,7 +17,7 @@ n_pause = 0.2;
 disp('rest');
 Panel_com('stop'); pause(n_pause)
 Panel_com('set_pattern_id', patID);pause(n_pause)  	% set pattern
-Panel_com('set_mode',mode); pause(n_pause)       	% closed loop tracking [xpos,ypos] (NOTE: 0=open, 1=closed)
+Panel_com('set_mode',[0 0]); pause(n_pause)        	% closed loop tracking [xpos,ypos] (NOTE: 0=open, 1=closed)
 Panel_com('set_position',[1 7]); pause(n_pause) 	% set starting position (xpos,ypos)
 Panel_com('set_funcX_freq', 50); pause(n_pause)  	% X update rate
 Panel_com('set_funcY_freq', 50); pause(n_pause)   	% Y update rate
