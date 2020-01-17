@@ -1,9 +1,8 @@
 function [] = Arena_CL(patID,channel,gain)
-%% Arena_CL: creates video input object with specififed camera settings
+%% Arena_CL: closed-loop feedback mode for the rigid tether
 %   INPUTS:
 %       patID      	:   CL pattern ID
 %       channel    	:   x or y
-%       time        :   rest time [s]
 %       gain        :   arena gain
 %   OUTPUTS:
 %       -
