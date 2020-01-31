@@ -1,8 +1,9 @@
 function [] = Arena_Ramp(patID,gain)
 %% Arena_TriWave: constant velocity motion
+%   INPUT:
 %       patID      	:   CL pattern ID
 %       gain        :   arena gain
-%   OUTPUTS:
+%   OUTPUT:
 %       -
 %
 
