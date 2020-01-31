@@ -1,6 +1,6 @@
 function [Func] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
 % MakePosFunction_SOS: makes sum-of-sine position function
-%   INPUTS:
+%   INPUT:
 %       root:       :   root directory to save position function file
 %       F           :   frequency range vector [Hz]
 %       N           :   # of frequencies
@@ -10,10 +10,10 @@ function [Func] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
 %       centPos     :   pixel # at center of panel
 %       showplot  	:   boolean (1= show pos vs time)
 %       saveFunc  	:   boolean (1= save function to root)
-%   OUTPUTS:
+%   OUTPUT:
 %       - 
+%
 %% DEBUGGING %%
-%---------------------------------------------------------------------------------------------------------------------------------
 % clear ; close all ; clc
 % root        = 'Q:\Box Sync\Git\Arena\Functions\';
 % F           = [0.1 8];
@@ -25,7 +25,6 @@ function [Func] = MakePosFunction_SOS(F,A,T,Fs,centPos,showplot,root)
 % centPos     = 15;
 % showplot    = 1;
 %% Generate SOS Signal %%
-%---------------------------------------------------------------------------------------------------------------------------------
 tt = (0:1/Fs:T)';  % time vector [s]
 N = length(F);
 
@@ -48,7 +47,6 @@ if showplot
         legend('deg','panel')
 end
 %% Generate FFT %%
-%---------------------------------------------------------------------------------------------------------------------------------
 if showplot
     figure ; clf
     [Fv1, Mag1 , Phase1] = FFT(tt,Func.deg);
@@ -83,7 +81,6 @@ if showplot
         end
 end
 %% Spectogram %%
-%---------------------------------------------------------------------------------------------------------------------------------
 if showplot
     figure (3) ; clf
     spectrogram(Func.deg,100,80,100,Fs,'yaxis')
@@ -92,7 +89,6 @@ if showplot
     rotate3d on
 end
 %% Save Fucntion %%
-%---------------------------------------------------------------------------------------------------------------------------------
 func  = (Func.panel/3.75) + centPos;
 % Name file
 strFreq = '';
