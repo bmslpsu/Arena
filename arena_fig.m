@@ -8,7 +8,8 @@ function [X,Y,Z] = arena_fig(pat)
 %       FlyState  	:   fly kinematic data
 %       AI          :   analog input voltages
 %       FILES    	:   filename listing
-%---------------------------------------------------------------------------------------------------------------------------------
+%
+
 clear;close all;clc
 
 pat = randi([0 7],32,96);

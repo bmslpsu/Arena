@@ -107,7 +107,7 @@ pattern.BitMapIndex = process_panel_map(pattern);
 pattern.data = Make_pattern_vector(pattern);
 
 % Save pattern
-if nargin==2
+if nargin==2 && ~isempty(root)
     % Name file
     strFreq = '';
     for kk = 1:length(wavelength)
