@@ -21,9 +21,9 @@ if ~nargin % defaults
     FPS = 100;
     nFrame = 1;
     trig_mode = 'off';
-    Gain = 700;
+    Gain = 550;
 elseif nargin==1 % set FPS
-    Gain = 700;
+    Gain = 550;
     nFrame = 1;
   	trig_mode = 'off';
 elseif nargin==2 % with trigger
@@ -51,7 +51,9 @@ VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
 SRC = get(VID, 'Source');
 % SRC.AcquisitionFrameRateAbs = FPS;
 SRC.AcquisitionFrameRateEnable = 'False';
-SRC.Gamma = 0.386367797851563;
+SRC.GammaEnable = 'True';
+% SRC.Gamma = 0.386367797851563;
+SRC.Gamma = 0.613632202148438;
 SRC.GainRaw = Gain;
 SRC.ExposureTimeAbs = 0.95*(1/FPS)*1e6;
 % SRC.ExposureTimeRaw = 0.9*(1/FPS)*1e6;
@@ -64,7 +66,7 @@ SRC.TriggerSelector = 'FrameStart';
 % SRC.ExposureMode = 'Timed';
 
 fprintf('Basler_acA640_120gm: \n FPS: %i \n Exposure Time: %i \n Gain: %i \n Trigger: %s \n',...
-    SRC.AcquisitionFrameRateAbs,SRC.ExposureTimeAbs,SRC.GainRaw,SRC.TriggerMode)
+    FPS,SRC.ExposureTimeAbs,SRC.GainRaw,SRC.TriggerMode)
 if strcmp(trig_mode,'on')
     fprintf(' Frames: %i \n',VID.TriggerRepeat + 1)    
 end

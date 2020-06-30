@@ -33,7 +33,7 @@ end
 
 n_pause = 0.2;
 
-disp('rest');
+%disp('rest');
 Panel_com('stop'); pause(n_pause)
 Panel_com('set_pattern_id', patID);pause(n_pause)      	% set pattern
 Panel_com('set_mode',mode); pause(n_pause)             	% closed loop tracking [xpos,ypos] (NOTE: 0=open, 1=closed)
