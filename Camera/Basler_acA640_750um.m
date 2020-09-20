@@ -53,7 +53,7 @@ if strcmp(SRC.TriggerMode,'on')
     SRC.TriggerActivation = 'RisingEdge';
     SRC.TriggerSelector = 'FrameStart';
     SRC.ExposureMode = 'TriggerWidth';
-elseif strcmp(SRC.TriggerMode,'off')
+elseif strcmp(SRC.TriggerMode,'Off')
     SRC.ExposureMode = 'Timed';
     SRC.ExposureTime = 9500;
 end

@@ -6,12 +6,11 @@ function [] = MakeBatch()
 %       - 
 
 %% Make Chirp Functions
-%---------------------------------------------------------------------------------------------------------------------------------
-clear ; close all ; clc
+% clear ; close all ; clc
 root        = 'C:\Users\boc5244\Documents\GitHub\Arena\Functions\';
-FI          = 0.5;
-FE          = 2;
-A           = 3.75*[10];
+FI          = 0.1;
+FE          = 12;
+A           = 3.75*[4];
 T           = 20;
 Fs          = 200;
 centPos     = 15;
@@ -20,7 +19,7 @@ method      = 'Logarithmic';
 showplot    = true;
 
 for kk = 1:length(A)
-   Func = MakePosFunction_Chirp(FI,FE,A(kk),T,Fs,centPos,rmp,method,showplot,root);
+   Func = MakePosFunction_Chirp(FI,FE,A(kk),T,Fs,centPos,rmp,method,showplot);
    pause(0.5)
 %    close all
 end
@@ -32,7 +31,6 @@ dv = [0 ; diff(Func.deg)/(1/Fs)];
 % plot(tt,dv)
 
 %% Make SOS Functions
-%---------------------------------------------------------------------------------------------------------------------------------
 clear ; close all ; clc
 root        = 'C:\Users\boc5244\Documents\GitHub\Arena\Functions\';
 % F           = [1.3 2.5 4.7 7.0 11.3 14]';
