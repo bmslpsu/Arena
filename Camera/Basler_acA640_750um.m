@@ -42,7 +42,6 @@ VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
 SRC = get(VID, 'Source');
 % SRC.AcquisitionFrameRateEnable = 'False';
 % SRC.AcquisitionFrameRate = 200;
-SRC.ExposureTime = 9500;
 SRC.Gamma = 0.6199951171875;
 SRC.Gain = 12.009207563363388;
 SRC.BlackLevel = 0;
