@@ -1,4 +1,4 @@
-function [pattern] = make_pattern_wave(wave, res, h, rc, root)
+function [pattern] = make_pattern_wave(wave, res, h, rc, xy, root)
 %% make_pattern_wave: makes pattern with two channels
 %  Channel-X: changes spatial wavelength
 %  Channel-Y: rotates ground
@@ -18,8 +18,8 @@ function [pattern] = make_pattern_wave(wave, res, h, rc, root)
 %           .y_num          -   ypos limits
 %                               by convention, ypos relates to non-length
 %                               conserving transformations
-%           .x_panels       -   number of panels in x direction
-%           .y_panels       -   number of panels in y directions
+%           .x_pixel        -   number of panels in x direction
+%           .y_pixel        -   number of panels in y directions
 %           .num_panels     -   number of panels in array
 %                               (.x_panels*.y_panels)
 %           .panel_size     -   '0' gives default 8x8, '1' allows user specific
@@ -35,20 +35,24 @@ function [pattern] = make_pattern_wave(wave, res, h, rc, root)
 
 % wave = 3.75*[0,2,4,6,8,12,16,24,32,48,96,inf];
 
-if nargin < 5
+if nargin < 6
     root = []; % don't save
-    if nargin < 4
-        rc = false; % default is row compression off
-        if nargin < 3
-            h = 2; % default is 2 panels high
-            if nargin < 2
-                res = 3.75; % default arena resolution [°]
+    if nargin < 5
+        xy = 'x'; % rotate in the x-channel
+        if nargin < 4
+            rc = false; % default is row compression off
+            if nargin < 3
+                h = 2; % default is 2 panels high
+                if nargin < 2
+                    res = 3.75; % default arena resolution [°]
+                end
             end
         end
     end
 end
 
 % Set panel variables
+pattern.xy = xy;
 pattern.gs_val = 1; % pattern will use 2 intensity levels
 pattern.row_compression = rc; % row compression flag
 pattern.pixel_per_panel = 8; % pixels per panel
@@ -68,7 +72,7 @@ assert(round(pattern.x_pixel) == pattern.x_pixel, ...
 % Set pattern channel variables
 pattern.x_num = pattern.x_pixel; % pattern will move trhough each x-pixel in x-channel
 pattern.y_num = length(wave); % # of spatial wavelength's for y-channel
-pattern.num_panel = (pattern.x_pixel/pattern.pixel_per_panel)*pattern.height; % # of unique panel IDs required
+pattern.num_panels = (pattern.x_pixel/pattern.pixel_per_panel)*pattern.height; % # of unique panel IDs required
 
 % Calculate bar widths for each wavelength
 barwidth = pattern.x_num*(wave./360);
@@ -112,6 +116,20 @@ for jj = 1:pattern.y_num
     end
 end
 
+% Set direction of yaw rotation to x or y channel
+switch pattern.xy
+    case 'x' % pattern rotates in x-channel
+        % already set
+    case 'y' % make pattern rotate in y-channel
+        Pats = permute(Pats, [1 2 4 3]);  % flip x & y channels
+        x_num = pattern.x_num;
+        y_num = pattern.y_num;
+        pattern.y_num = x_num;
+        pattern.x_num = y_num;
+    otherwise
+        error('"xy" must be "x" or "y"')
+end 
+
 % Store pattern data
 pattern.Pats = Pats;
 
@@ -120,7 +138,7 @@ Panel_map = [12 8  4  11 7  3  10 6  2  9  5  1 ;...
                      24 20 16 23 19 15 22 18 14 21 17 13;...
                      36 32 28 35 31 27 34 30 26 33 29 25;...
                      48 44 40 47 43 39 46 42 38 45 41 37];
-pattern.Panel_map = Panel_map(1:pattern.height, :);
+pattern.Panel_map = Panel_map(1:pattern.height, :); % only for how many panels rows (up to 4)
 
 % Make BitMap
 pattern.BitMapIndex = process_panel_map(pattern);
@@ -137,7 +155,7 @@ if ~isempty(root)
     end
     strWave = strtrim(strWave);
 	str = ['pattern_wave_' strWave 'gs=' num2str(pattern.gs_val) '_cont=' num2str(Int.High) ...
-        '-' num2str(Int.Low) '_' num2str(pattern.num_panel) 'pannel.mat'];
+        '-' num2str(Int.Low) '_' num2str(pattern.num_panels) 'pannel_' pattern.xy '.mat'];
     
     save(fullfile(root,str), 'pattern');
 end
