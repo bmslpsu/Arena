@@ -1,0 +1,9 @@
+When making function: accurate for < 20 seconds
+
+100Hz: 100.12Hz 
+
+200Hz: 200.3Hz
+
+300Hz: 300.45-300.49Hz
+
+400Hz: 400.63Hz
