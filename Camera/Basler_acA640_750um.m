@@ -32,10 +32,15 @@ VID.FrameGrabInterval = 1;
 VID.FramesPerTrigger = 1;
 VID.TriggerRepeat = nFrame - 1;
 
-ROI.x = 512;
-ROI.y = 512;
+ROI.x = 460;
+ROI.y = 460;
 ROI.xoff = (round(672 - ROI.x)/2);
 ROI.yoff = (round(512 - ROI.y)/2);
+% ROI.x = 480;
+% ROI.y = 480;
+% ROI.xoff = 0;
+% ROI.yoff = 0;
+
 VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
 
 % Set video source parameters
