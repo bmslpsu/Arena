@@ -1,5 +1,5 @@
-function [pattern] = make_pattern_wave(wave, res, h, rc, xy, root)
-%% make_pattern_wave: makes pattern with two channels
+function [pattern] = make_pattern_wave_192(wave, res, h, rc, xy, root)
+%% make_pattern_wave_192: makes pattern with two channels for 192 panel arena
 %  Channel-1: changes spatial wavelength
 %  Channel-2: rotates ground
 %
@@ -140,18 +140,15 @@ Panel_map = [12 8  4  11 7  3  10 6  2  9  5  1 ;...
                      24 20 16 23 19 15 22 18 14 21 17 13;...
                      36 32 28 35 31 27 34 30 26 33 29 25;...
                      48 44 40 47 43 39 46 42 38 45 41 37];
+                 
+pattern.Pats = Pats;
 
-try
-     % only for how many panels rows (up to 4)
-    if pattern.row_compression
-        pattern.Panel_map = Panel_map(1:pattern.height, :);
-    else
-        pattern.Panel_map = Panel_map(1:pattern.height/8, :);
-    end
-catch
-    warning('Panel map not sufficent for this pattern')
-    pattern.Panel_map = Panel_map;
+panel_map = [];
+panel_a = flip([1 5 9 13 17 21 2 6 10 14 18 22 3 7 11 15 19 23 4 8 12 16 20 24]);
+for r = 1:pattern.height
+    panel_map = [panel_map ; panel_a + 24*(r-1)];
 end
+pattern.Panel_map = panel_map;
 
 % Make BitMap
 pattern.BitMapIndex = process_panel_map(pattern);
