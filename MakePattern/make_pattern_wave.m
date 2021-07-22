@@ -140,7 +140,18 @@ Panel_map = [12 8  4  11 7  3  10 6  2  9  5  1 ;...
                      24 20 16 23 19 15 22 18 14 21 17 13;...
                      36 32 28 35 31 27 34 30 26 33 29 25;...
                      48 44 40 47 43 39 46 42 38 45 41 37];
-pattern.Panel_map = Panel_map(1:pattern.height, :); % only for how many panels rows (up to 4)
+
+try
+     % only for how many panels rows (up to 4)
+    if pattern.row_compression
+        pattern.Panel_map = Panel_map(1:pattern.height, :);
+    else
+        pattern.Panel_map = Panel_map(1:pattern.height/8, :);
+    end
+catch
+    warning('Panel map not sufficent for this pattern')
+    pattern.Panel_map = Panel_map;
+end
 
 % Make BitMap
 pattern.BitMapIndex = process_panel_map(pattern);
