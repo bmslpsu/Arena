@@ -72,9 +72,8 @@ assert(round(pattern.x_pixel) == pattern.x_pixel, ...
 
 % Set pattern channel variables
 pattern.x_num = pattern.x_pixel; % pattern will move trhough each x-pixel in x-channel
-pattern.y_num = length(barwidths); % # of spatial wavelength's for y-channel
+pattern.y_num = length(barwidths); % # of barwidths for y-channel
 pattern.num_panels = (pattern.x_pixel/pattern.pixel_per_panel)*pattern.height; % # of unique panel IDs required
-
 
 % Make y-channel: spatial wavelengths
 Int.High = 1; % high intensity value (0-15)
@@ -87,8 +86,11 @@ for jj = 1:pattern.y_num
         Pats(:,:, 1, jj) = Int.High*ones(pattern.y_pixel, pattern.x_pixel);        
     else % for any grating
         off = pattern.x_pixel - barwidths(jj);
-        Pats(:,:, 1, jj) = [Int.High*ones(pattern.y_pixel, barwidths(jj)) , ...
+        grating = [Int.High*ones(pattern.y_pixel, barwidths(jj)) , ...
                                      Int.Low*ones(pattern.y_pixel, off)];
+        
+        shift_cent = 4 + barwidths(jj) - round(barwidths(jj)/2);
+      	Pats(:,:, 1, jj) = circshift(grating, -shift_cent, 2);
     end
 end
 
@@ -137,7 +139,7 @@ if ~isempty(root)
 %        strWave = [strWave  num2str(wave(kk)) '_'];
 %     end
 %     strWave = strtrim(strWave);
-	str = ['pattern_bar_' 'gs=' num2str(pattern.gs_val) '_cont=' num2str(Int.High) ...
+	str = ['pattern_bar_cent_' 'gs=' num2str(pattern.gs_val) '_cont=' num2str(Int.High) ...
         '-' num2str(Int.Low) '_' num2str(pattern.num_panels) 'pannel_' pattern.xy '.mat'];
     
     save(fullfile(root,str), 'pattern');
