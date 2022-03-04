@@ -21,9 +21,9 @@ if ~nargin % defaults
     FPS = 100;
     nFrame = 1;
     trig_mode = 'off';
-    Gain = 550;
+    Gain = 800;
 elseif nargin==1 % set FPS
-    Gain = 550;
+    Gain = 800;
     nFrame = 1;
   	trig_mode = 'off';
 elseif nargin==2 % with trigger
@@ -41,10 +41,13 @@ VID.FrameGrabInterval = 1;
 VID.FramesPerTrigger = 1;
 VID.TriggerRepeat = nFrame - 1;
 
+% ROI.x = 500;
+% ROI.y = 250;
 ROI.x = 500;
 ROI.y = 250;
 ROI.xoff = (round(659 - ROI.x)/2);
-ROI.yoff = (round(494 - ROI.y)/2);
+% ROI.yoff = (round(494 - ROI.y)/2);
+ROI.yoff = 1;
 VID.ROIPosition = [ROI.xoff ROI.yoff ROI.x ROI.y];
 
 % Set video source parameters
@@ -53,9 +56,11 @@ SRC = get(VID, 'Source');
 SRC.AcquisitionFrameRateEnable = 'False';
 SRC.GammaEnable = 'True';
 % SRC.Gamma = 0.386367797851563;
-SRC.Gamma = 0.613632202148438;
+% SRC.Gamma = 0.613632202148438;
+% SRC.Gamma = 1.04;
+SRC.Gamma = 1.3;
 SRC.GainRaw = Gain;
-SRC.ExposureTimeAbs = 0.95*(1/FPS)*1e6;
+SRC.ExposureTimeAbs = 0.97*(1/FPS)*1e6;
 % SRC.ExposureTimeRaw = 0.9*(1/FPS)*1e6;
 
 % Configure Trigger
