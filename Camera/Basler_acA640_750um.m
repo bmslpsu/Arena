@@ -32,10 +32,10 @@ VID.FrameGrabInterval = 1;
 VID.FramesPerTrigger = 1;
 VID.TriggerRepeat = nFrame - 1;
 
-% ROI.x = 460;
-% ROI.y = 460;
-ROI.x = 304;
-ROI.y = 300;
+ROI.x = 420;
+ROI.y = 420;
+% ROI.x = 304;
+% ROI.y = 300;
 ROI.xoff = (round(672 - ROI.x)/2);
 ROI.yoff = (round(512 - ROI.y)/2);
 % ROI.x = 480;
@@ -51,8 +51,10 @@ SRC.AcquisitionFrameRateEnable = 'False';
 SRC.AcquisitionFrameRate = 200;
 % SRC.Gamma = 0.6199951171875;
 % SRC.Gain = 12.009207563363388;
-SRC.Gamma = 0.659088134765625;
-SRC.Gain = 9.4997425041395296;
+% SRC.Gamma = 0.659088134765625;
+% SRC.Gain = 9.4997425041395296;
+% SRC.Gamma = 1.2;
+% SRC.Gain = 5.9886;
 SRC.BlackLevel = 0;
 
 % Configure Trigger

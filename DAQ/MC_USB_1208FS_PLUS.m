@@ -39,7 +39,7 @@ end
 
 % Add analog output channels
 ch.AO = addAnalogOutputChannel(s,devices.ID, AO, 'Voltage');
-ch.AO.Name = 'Trigger_OUT';
+%ch.AO.Name = 'Trigger_OUT';
 
 % Setup Sampling
 s.Rate = rate; % samples per second
