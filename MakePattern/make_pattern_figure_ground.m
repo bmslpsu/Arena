@@ -1,18 +1,19 @@
-function [pattern] = make_pattern_wave(wave, res, h, rc, xy, root)
-%% make_pattern_wave: makes pattern with two channels
-%  Channel-1: changes spatial wavelength
-%  Channel-2: rotates ground
+function [pattern] = make_pattern_figure_ground(figwidth, wave, res, h, rc, xy, root)
+%% make_pattern_figure_gorund: makes pattern with two channels
+%  Channel-1: rotates background
+%  Channel-2: rotates bar
 %
 %   INPUTS:
-%       wave    :       row vector containing spatial wavelength's [°]
-%       res     :       spatial resolution of arena [°]
-%       h       :      	arena height (# of panels not pixels)
-%       rc      :       row compression on or off (boolean)
-%       xy    	:       'x' or 'y' to set rotation channel
-%       root    :       directory to save pattern file
+%       figwidth    : barwidth in pixels
+%       wave        : spatial wavelength of background [°]%
+%       res         : spatial resolution of arena [°]
+%       h           : arena height (# of panels not pixels)
+%       rc          : row compression on or off (boolean)
+%       xy          : 'x' or 'y' to set rotation channel
+%       root        :  directory to save pattern file
 %
 %   OUTPUTS:
-%       pattern :       parent structure
+%       pattern : parent structure
 %           .x_num          -   xpos limits
 %                               by convention, xpos relates to translation and
 %                               rotations of a static pattern
@@ -35,17 +36,15 @@ function [pattern] = make_pattern_wave(wave, res, h, rc, xy, root)
 %                               'make_pattern_vector(pattern);'
 %
 
-% wave = 3.75*[0,2,4,6,8,12,16,24,32,48,96,inf];
-
-if nargin < 6
+if nargin < 7
     root = []; % don't save
-    if nargin < 5
+    if nargin < 6
         xy = 'x'; % rotate in the x-channel
-        if nargin < 4
+        if nargin < 5
             rc = false; % default is row compression off
-            if nargin < 3
+            if nargin < 4
                 h = 2; % default is 2 panels high
-                if nargin < 2
+                if nargin < 3
                     res = 3.75; % default arena resolution [°]
                 end
             end
@@ -72,8 +71,8 @@ assert(round(pattern.x_pixel) == pattern.x_pixel, ...
     'Arena resolution must yield an integer number of pixels')
 
 % Set pattern channel variables
-pattern.x_num = pattern.x_pixel; % pattern will move trhough each x-pixel in x-channel
-pattern.y_num = length(wave); % # of spatial wavelength's for y-channel
+pattern.x_num = pattern.x_pixel; % background will move though each x-pixel in x-channel
+pattern.y_num = pattern.x_pixel; % bar  will move though each x-pixel in y-channel
 pattern.num_panels = (pattern.x_pixel/pattern.pixel_per_panel)*pattern.height; % # of unique panel IDs required
 
 % Calculate bar widths for each wavelength
@@ -96,25 +95,39 @@ if any(~waveTest)
    error([err,'Valid wavelengths are factors of 360° & divisible by 7.5°'])    
 end
 
-% Make y-channel: spatial wavelengths
+% Make background grating
 Int.High = 1; % high intensity value (0-15)
 Int.Low  = 0; % low intensity value (0-15)
 Pats = zeros(pattern.y_pixel, pattern.x_pixel, pattern.x_num, pattern.y_num);
-for jj = 1:pattern.y_num
-    if barwidth(jj) == 0 % for all panels low
-        Pats(:,:, 1, jj) = Int.Low*ones(pattern.y_pixel, pattern.x_pixel);
-    elseif barwidth(jj) == inf % for all panels high
-        Pats(:,:, 1, jj) = Int.High*ones(pattern.y_pixel, pattern.x_pixel);        
-    else % for any grating
-        Pats(:,:, 1, jj) = repmat( [ Int.Low*ones(pattern.y_pixel,barwidth(jj)/2) , ...
-                                     Int.High*ones(pattern.y_pixel,barwidth(jj)/2) ], 1, reps(jj) );
-    end
+jj = 1;
+if barwidth(jj) == 0 % for all panels low
+    Pats(:,:, 1, jj) = Int.Low*ones(pattern.y_pixel, pattern.x_pixel);
+elseif barwidth(jj) == inf % for all panels high
+    Pats(:,:, 1, jj) = Int.High*ones(pattern.y_pixel, pattern.x_pixel);        
+else % for any grating
+    Pats(:,:, 1, jj) = repmat( [ Int.Low*ones(pattern.y_pixel,barwidth(jj)/2) , ...
+                                 Int.High*ones(pattern.y_pixel,barwidth(jj)/2) ], 1, reps(jj) );
 end
 
-% Make x-channel: yaw rotation
-for jj = 1:pattern.y_num
-    for ii = 2:pattern.x_num
-        Pats(:,:,ii,jj) = ShiftMatrix(Pats(:,:,ii-1,jj), 1, 'r', 'y'); % shift one bit to right
+% Make x-channel: background rotation
+for ii = 2:pattern.x_num
+    Pats(:,:,ii,1) = ShiftMatrix(Pats(:,:,ii-1,1), 1, 'r', 'y'); % shift one bit to right
+end
+Pats_background = Pats;
+
+% Make figure image
+fig = 0*ones(1,figwidth);
+fig = repmat(fig, [pattern.y_pixel 1]);
+
+% Make y-channel: figure rotation
+for ii = 1:pattern.x_num
+    for jj = 1:pattern.y_num
+        fig_mask = false(pattern.y_pixel, pattern.x_pixel);
+        fig_mask(:,1:figwidth) = true;
+        fig_mask = circshift(fig_mask, jj-1, 2);
+        temp = Pats_background(:,:,ii,1);
+       	temp(fig_mask) = fig;
+        Pats(:,:,ii,jj) = temp;
     end
 end
 
@@ -136,22 +149,11 @@ end
 pattern.Pats = Pats;
 
 % Store arena panel layout
-Panel_map = [12 8 4 11 7 3 10 6 2 9 5 1 ;...    
+Panel_map = [12 8  4  11 7  3  10 6  2  9  5  1 ;...    
                      24 20 16 23 19 15 22 18 14 21 17 13;...
                      36 32 28 35 31 27 34 30 26 33 29 25;...
                      48 44 40 47 43 39 46 42 38 45 41 37];
-
-try
-     % only for how many panels rows (up to 4)
-    if pattern.row_compression
-        pattern.Panel_map = Panel_map(1:pattern.height, :);
-    else
-        pattern.Panel_map = Panel_map(1:pattern.height/8, :);
-    end
-catch
-    warning('Panel map not sufficent for this pattern')
-    pattern.Panel_map = Panel_map;
-end
+pattern.Panel_map = Panel_map(1:pattern.height, :); % only for how many panels rows (up to 4)
 
 % Make BitMap
 pattern.BitMapIndex = process_panel_map(pattern);
@@ -162,15 +164,9 @@ pattern.data = Make_pattern_vector(pattern);
 % Save pattern
 if ~isempty(root)
     % Name file
-    strWave = '';
-    for kk = 1:length(wave)
-       strWave = [strWave  num2str(wave(kk)) '_'];
-    end
-    strWave = strtrim(strWave);
-	str = ['pattern_wave_' strWave 'gs=' num2str(pattern.gs_val) '_cont=' num2str(Int.High) ...
+	str = ['pattern_fig_' num2str(figwidth) '_wave_' num2str(wave) '_gs=' num2str(pattern.gs_val) '_cont=' num2str(Int.High) ...
         '-' num2str(Int.Low) '_' num2str(pattern.num_panels) 'pannel_' pattern.xy '.mat'];
-    
     save(fullfile(root,str), 'pattern');
 end
-
 end
+

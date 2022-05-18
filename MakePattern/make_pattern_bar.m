@@ -71,7 +71,7 @@ assert(round(pattern.x_pixel) == pattern.x_pixel, ...
     'Arena resolution must yield an integer number of pixels')
 
 % Set pattern channel variables
-pattern.x_num = pattern.x_pixel; % pattern will move trhough each x-pixel in x-channel
+pattern.x_num = pattern.x_pixel; % pattern will move through each x-pixel in x-channel
 pattern.y_num = length(barwidths); % # of barwidths for y-channel
 pattern.num_panels = (pattern.x_pixel/pattern.pixel_per_panel)*pattern.height; % # of unique panel IDs required
 
@@ -94,7 +94,7 @@ for jj = 1:pattern.y_num
     end
 end
 
-% Make x-channe: yaw rotation
+% Make x-channel: yaw rotation
 for jj = 1:pattern.y_num
     for ii = 2:pattern.x_num
         Pats(:,:,ii,jj) = ShiftMatrix(Pats(:,:,ii-1,jj), 1, 'r', 'y'); % shift one bit to right
